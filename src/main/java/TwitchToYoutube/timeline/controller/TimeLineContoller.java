@@ -10,4 +10,8 @@ public class TimeLineContoller {
     public String indexPage(){
         return "index";
     }
+    @GetMapping("/dashboard")
+    public String dashBoardPage(){
+        return "dashboard";
+    }
 }
