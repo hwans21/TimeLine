@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html th:fragment="layout (${title}, ${content})" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:fragment="title">TimeLine</title>
+  
+</head>
+<body>
+
+<div th:replace="~{fragments/navigation :: navigation}"></div>
+<div th:replace="~{fragments/login :: login}"></div>
+
+<section th:fragment="content" class="page-section" id="contact">
+  <!-- Standard button -->
+  <form id="create_form">
+    <input type="date" name="" id="">
+    <select class="form-select" aria-label="Default select example">
+      <option value="0" selected>유튜브 제목1</option>
+      <option value="1">유튜브 제목2</option>
+      <option value="2">유튜브 제목3</option>
+      <option value="3">유튜브 제목4</option>
+    </select>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr >
+          <th class="col-xs-1"><input class="form-check-input" type="checkbox" id="all_select"></th>
+          <th class="col-xs-2">시간</th>
+          <th class="col-xs-9">제목</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th><input class="form-check-input" type="checkbox"></th>
+          <td><input type="text" value="00:10:00"></td>
+          <td><input type="text" value="허헣"></td>
+        </tr>
+        <tr>
+          <th><input class="form-check-input" type="checkbox"></th>
+          <td><input type="text" value="00:12:55"></td>
+          <td><input type="text" value="하하하하"></td>
+        </tr>
+        <tr>
+          <th><input class="form-check-input" type="checkbox"></th>
+          <td><input type="text" value="00:20:33"></td>
+          <td><input type="text" value="테스트 제목입니다."></td>
+        </tr>
+        <tr>
+          <th><input class="form-check-input" type="checkbox"></th>
+          <td><input type="text" value="00:40:33"></td>
+          <td><input type="text" value="테스트 제목입니다."></td>
+        </tr>
+        <tr>
+          <th><input class="form-check-input" type="checkbox"></th>
+          <td><input type="text" value="01:00:33"></td>
+          <td><input type="text" value="테스트 제목입니다."></td>
+        </tr>
+        <tr>
+          <th><input class="form-check-input" type="checkbox"></th>
+          <td><input type="text" value="01:20:33"></td>
+          <td><input type="text" value="테스트 제목입니다."></td>
+        </tr>
+      </tbody>
+
+    </table>
+  </form>
+
+
+
+
+
+
+</section>
+
+
+
+<div th:replace="~{fragments/config :: config}"></div>
+
+</div>
+
+</body>
+</html>

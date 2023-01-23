@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html th:fragment="layout (${title}, ${content})" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:fragment="title">TimeLine</title>
+  
+</head>
+<body>
+
+<div th:replace="~{fragments/navigation :: navigation}"></div>
+<div th:replace="~{fragments/login :: login}"></div>
+
+<section th:fragment="content" class="page-section" id="contact">
+  <!-- Standard button -->
+  
+</section>
+
+
+
+<div th:replace="~{fragments/config :: config}"></div>
+
+</div>
+
+</body>
+</html>

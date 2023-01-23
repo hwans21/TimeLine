@@ -6,7 +6,30 @@
 <body>
 <nav th:fragment="navigation" class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
   <!-- Navigation-->
-  <div class="row" id="header_title">
+  <div class="row" id="nav">
+    <div class="nav-title">타임라인 생성기</div>
+    <!--  col-xs-(12/메뉴개수)  -->
+    <a th:href="@{/create}">
+      <div class="nav-menu col-xs-4">
+      <!--   로그인한 사용자   -->
+        타임라인 생성
+        <i class="bi bi-stopwatch"></i>
+      </div>
+    </a>
+    <!--  관리자(스트리머)  -->
+    <a th:href="@{/manage}">
+      <div class="nav-menu col-xs-4">
+        유튜브 리스트
+        <i class="bi bi-clipboard2-check"></i>
+      </div>
+    </a>
+    <!-- 모두 -->
+    <a th:href="@{/list}">
+      <div class="nav-menu col-xs-4">
+        타임라인 목록
+        <i class="bi bi-clipboard2-data"></i>
+      </div>
+    </a>
   </div>
 </nav>
 </body>

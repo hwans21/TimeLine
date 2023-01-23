@@ -1,0 +1,22 @@
+.page-section{
+    margin:10px;
+}
+.page-section #create_form{
+    font-size: 20px;
+    font-weight: 400;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.page-section #create_form > input{
+    height: 30px;
+}
+.page-section #create_form > select{
+    height: 30px;
+}
+.page-section #create_form table thead{
+    text-align: center;
+}
+
+
+.page-section #create_form table input{
+    border: 0px;
+}

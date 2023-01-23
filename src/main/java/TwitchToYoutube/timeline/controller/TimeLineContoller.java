@@ -8,10 +8,22 @@ public class TimeLineContoller {
 
     @GetMapping("/")
     public String indexPage(){
-        return "index";
+        return "list_timeline";
     }
-    @GetMapping("/dashboard")
-    public String dashBoardPage(){
-        return "dashboard";
+
+//    ----------------------------------
+
+    @GetMapping("/list")
+    public String listPage(){
+        return "list_timeline";
     }
+    @GetMapping("/create")
+    public String createPage(){
+        return "create_timeline";
+    }
+    @GetMapping("/manage")
+    public String managePage(){
+        return "youtube_list";
+    }
+
 }
