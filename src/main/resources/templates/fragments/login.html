@@ -4,9 +4,14 @@
     <!-- login -->
     <th:block th:fragment="loginFragment">
 
-        <div class="login"  style="cursor:pointer;" onclick="location.href='https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=jcmj66qmli9btfjppfvoxnh1i46vjt&redirect_uri=http://localhost:8080/login&scope=channel%3Amanage%3Apolls+channel%3Aread%3Apolls&state=c3ab8aa609ea11e793ae92361f002671'">
+        <div class="login"  style="cursor:pointer;" onclick="location.href='https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=jcmj66qmli9btfjppfvoxnh1i46vjt&redirect_uri=http://localhost:8080/login&scope=user%3Aread%3Aemail&state=c3ab8aa609ea11e793ae92361f002671'">
             <i class="bi bi-person-circle"></i>
-            로그인
+            <th:block th:if="${display_name == null}">
+                <span>로그인</span>
+            </th:block>
+            <th:block th:if="${display_name != ''}">
+                <span th:text="${display_name}">ttt</span>
+            </th:block>
         </div>
     </th:block>
 </html>

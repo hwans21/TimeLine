@@ -35,28 +35,7 @@ public class TimeLineContoller {
         return "youtube_list";
     }
 
-    @GetMapping("/login")
-    public String login(HttpServletRequest request){
-        String code = request.getParameter("code");
-        String scope = request.getParameter("scope");
-        String state = request.getParameter("state");
-        String error = request.getParameter("error");
-        String error_description = request.getParameter("error_description");
-        if(code != null) {
-            System.out.println("===========CORRECT===========");
-            System.out.println("code : "+code);
-            System.out.println("scope : "+scope);
-            System.out.println("state : "+state);
-        }else {
-            System.out.println("===========ERROR===========");
-            System.out.println("error : "+error);
-            System.out.println("error_description : "+error_description);
-            System.out.println("state : "+state);
-        }
 
-
-        return "create_timeline";
-    }
 
 
 }
