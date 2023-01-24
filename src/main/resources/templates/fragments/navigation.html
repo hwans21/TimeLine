@@ -1,37 +1,39 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<style>
 
-</style>
-<body>
-<nav th:fragment="navigation" class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
-  <!-- Navigation-->
-  <div class="row" id="nav">
-    <div class="nav-title">타임라인 생성기</div>
-    <!--  col-xs-(12/메뉴개수)  -->
-    <a th:href="@{/create}">
-      <div class="nav-menu col-xs-4">
-      <!--   로그인한 사용자   -->
-        타임라인 생성
-        <i class="bi bi-stopwatch"></i>
+<th:block th:fragment="navigation" >
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand">타임라인 생성기</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" th:href="@{/create}">
+              타임라인 생성
+              <i class="bi bi-stopwatch"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/manage}">
+              유튜브 리스트
+              <i class="bi bi-clipboard2-check"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/list}">
+              타임라인 목록
+              <i class="bi bi-clipboard2-data"></i>
+            </a>
+          </li>
+        </ul>
       </div>
-    </a>
-    <!--  관리자(스트리머)  -->
-    <a th:href="@{/manage}">
-      <div class="nav-menu col-xs-4">
-        유튜브 리스트
-        <i class="bi bi-clipboard2-check"></i>
-      </div>
-    </a>
-    <!-- 모두 -->
-    <a th:href="@{/list}">
-      <div class="nav-menu col-xs-4">
-        타임라인 목록
-        <i class="bi bi-clipboard2-data"></i>
-      </div>
-    </a>
-  </div>
-</nav>
-</body>
+    </div>
+  </nav>
+
+
+</th:block>
 
 </html>

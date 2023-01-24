@@ -1,80 +1,129 @@
 <!DOCTYPE html>
-<html th:fragment="layout (${title}, ${content})" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title th:fragment="title">TimeLine</title>
-  
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 
-<div th:replace="~{fragments/navigation :: navigation}"></div>
-<div th:replace="~{fragments/login :: login}"></div>
-
-<section th:fragment="content" class="page-section" id="contact">
-  <!-- Standard button -->
-  <form id="create_form">
-    <input type="date" name="" id="">
-    <select class="form-select" aria-label="Default select example">
-      <option value="0" selected>유튜브 제목1</option>
-      <option value="1">유튜브 제목2</option>
-      <option value="2">유튜브 제목3</option>
-      <option value="3">유튜브 제목4</option>
-    </select>
-    <table class="table">
-      <thead class="thead-dark">
-        <tr >
-          <th class="col-xs-1"><input class="form-check-input" type="checkbox" id="all_select"></th>
-          <th class="col-xs-2">시간</th>
-          <th class="col-xs-9">제목</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th><input class="form-check-input" type="checkbox"></th>
-          <td><input type="text" value="00:10:00"></td>
-          <td><input type="text" value="허헣"></td>
-        </tr>
-        <tr>
-          <th><input class="form-check-input" type="checkbox"></th>
-          <td><input type="text" value="00:12:55"></td>
-          <td><input type="text" value="하하하하"></td>
-        </tr>
-        <tr>
-          <th><input class="form-check-input" type="checkbox"></th>
-          <td><input type="text" value="00:20:33"></td>
-          <td><input type="text" value="테스트 제목입니다."></td>
-        </tr>
-        <tr>
-          <th><input class="form-check-input" type="checkbox"></th>
-          <td><input type="text" value="00:40:33"></td>
-          <td><input type="text" value="테스트 제목입니다."></td>
-        </tr>
-        <tr>
-          <th><input class="form-check-input" type="checkbox"></th>
-          <td><input type="text" value="01:00:33"></td>
-          <td><input type="text" value="테스트 제목입니다."></td>
-        </tr>
-        <tr>
-          <th><input class="form-check-input" type="checkbox"></th>
-          <td><input type="text" value="01:20:33"></td>
-          <td><input type="text" value="테스트 제목입니다."></td>
-        </tr>
-      </tbody>
-
-    </table>
-  </form>
+  <th:block layout:fragment="content">
 
 
+    <section th:fragment="content" class="page-section" id="contact">
+
+      <!-- Standard button -->
+      <form id="create_form">
+
+        <div class="input-group mb-3">
+          <select class="form-select" aria-label="Default select example">
+            <option value="0" selected>kumikomii</option>
+            <option value="1">subtanker</option>
+          </select>
+          <input type="button" value="오늘" class="btn btn-primary">
+          <input type="button" value="일주일" class="btn btn-primary">
+          <input type="button" value="한달" class="btn btn-primary">
+
+        </div>
+        <div class="input-group mb-3">
+          <input type="date" name="" id="">
+          <span class="input-group-text">~</span>
+          <input type="date" name="" id="">
+        </div>
+        <div class="input-group mb-3">
+          <select class="form-select" aria-label="Default select example">
+            <option value="0" selected>유튜브 제목1</option>
+            <option value="1">유튜브 제목2</option>
+            <option value="2">유튜브 제목3</option>
+            <option value="3">유튜브 제목4</option>
+          </select>
+        </div>
+        <table class="table table-hover">
+          <thead class="table-dark">
+            <th class="g-col-xs-1" scope="col">시간</th>
+            <th class="g-col-xs-11" scope="col">제목</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>00:00:00</td>
+              <td>테스트 제목입니다. 1</td>
+            </tr>
+            <tr>
+              <td>00:10:00</td>
+              <td>테스트 제목입니다. 2</td>
+            </tr>
+            <tr>
+              <td>00:20:00</td>
+              <td>테스트 제목입니다. 3</td>
+            </tr>
+            <tr>
+              <td>00:30:00</td>
+              <td>테스트 제목입니다. 4</td>
+            </tr>
+            <tr>
+              <td>00:40:00</td>
+              <td>테스트 제목입니다. 5</td>
+            </tr>
+            <tr>
+              <td>00:50:00</td>
+              <td>테스트 제목입니다. 6</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">등록</button>
+          <button type="button" class="btn btn-secondary">복사</button>
+        </div>
+
+      </form>
+
+      <!-- create Modal -->
+      <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">타임라인 등록</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="타임라인 제목">
+                ※ 등록버튼을 누른 시점으로 저장됩니다.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary">저장</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- modify Modal -->
+      <div class="modal fade" id="modifyModal" tabindex="-2" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">타임라인 수정</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="00:00:00">
+                <input type="text" class="form-control" placeholder="타임라인 제목">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary">저장</button>
+              <button type="button" class="btn btn-danger">삭제</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
 
 
-</section>
+    </section>
+  </th:block>
 
 
 
-<div th:replace="~{fragments/config :: config}"></div>
 
-</div>
 
-</body>
+
 </html>
