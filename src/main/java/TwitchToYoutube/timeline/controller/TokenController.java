@@ -1,5 +1,7 @@
 package TwitchToYoutube.timeline.controller;
 
+import TwitchToYoutube.timeline.manager.SessionManager;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -10,40 +12,35 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class TokenController {
     private static final String clientId = "jcmj66qmli9btfjppfvoxnh1i46vjt";
+    private final SessionManager sessionManager;
+
+
+
     @GetMapping("/login")
-    public String login(HttpServletRequest request, Model model){
+    public String login(HttpServletRequest request, HttpServletResponse response, Model model){
         String code = request.getParameter("code");
         String scope = request.getParameter("scope");
         String state = request.getParameter("state");
         String error = request.getParameter("error");
         String error_description = request.getParameter("error_description");
         if(code != null) {
-            System.out.println("===========CORRECT===========");
-            System.out.println("code : "+code);
-            System.out.println("scope : "+scope);
-            System.out.println("state : "+state);
             String token = getToken(code);
-            System.out.println("token : "+token);
             Map<String, String> user = getUser(token);
-
-            for(String key : user.keySet()){
-                System.out.println(key+" : "+user.get(key));
-            }
-
-            model.addAttribute("display_name", user.get("display_name"));
-            return "create_timeline";
+            sessionManager.createSession(user, response);
+            model.addAttribute("user",user);
+            return "redirect:/list";
         }else {
             System.out.println("===========ERROR===========");
             System.out.println("error : "+error);
@@ -88,7 +85,7 @@ public class TokenController {
         datas.put("client_secret", getSecretkey());
         datas.put("code",code);
         datas.put("grant_type","authorization_code");
-        datas.put("redirect_uri","http://localhost:8080/getNick");
+        datas.put("redirect_uri","http://192.168.0.9:8080/getNick");
         String response = getRequest("https://id.twitch.tv/oauth2/token", headers, datas, "post");
         JSONParser parser = new JSONParser();
         JSONObject jobj = null;

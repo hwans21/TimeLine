@@ -1,5 +1,7 @@
 package TwitchToYoutube.timeline.controller;
 
+import TwitchToYoutube.timeline.manager.SessionManager;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class TimeLineContoller {
+    private final SessionManager sessionManager;
 
     @GetMapping("/")
-    public String indexPage(){
+    public String indexPage(HttpServletRequest request, Model model){
         return "list_timeline";
     }
 
