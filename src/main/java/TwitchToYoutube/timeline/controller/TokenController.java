@@ -1,13 +1,18 @@
 package TwitchToYoutube.timeline.controller;
 
+import TwitchToYoutube.timeline.entity.User;
+import TwitchToYoutube.timeline.enums.AuthType;
 import TwitchToYoutube.timeline.manager.SessionManager;
+import TwitchToYoutube.timeline.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -26,8 +31,10 @@ public class TokenController {
     private static final String clientId = "jcmj66qmli9btfjppfvoxnh1i46vjt";
     private final SessionManager sessionManager;
 
+    @Autowired
+    UserRepository repository;
 
-
+    @Transactional
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response, Model model){
         String code = request.getParameter("code");
@@ -39,6 +46,22 @@ public class TokenController {
             String token = getToken(code);
             Map<String, String> user = getUser(token);
             sessionManager.createSession(user, response);
+//            map.put("display_name",(String) dataJobj.get("display_name"));
+//            map.put("login",(String) dataJobj.get("login"));
+//            map.put("id",(String) dataJobj.get("id"));
+
+            User u = repository.find(Long.parseLong(user.get("id")));
+            // 테이블에 유저가 없다면 insert
+            if(u == null){
+                User in = new User(Long.parseLong(user.get("id")),user.get("login"), user.get("display_name"), AuthType.WATCHER);
+                repository.save(in);
+
+            // login_id 및 display_name이 변경되었을 경우 update
+            }else if(!user.get("login").equals(u.getUserLogin()) || !user.get("display_name").equals(u.getUserDisplay())){
+               u.setUserLogin(user.get("login"));
+               u.setUserDisplay(user.get("display_name"));
+
+            }
             model.addAttribute("user",user);
             return "redirect:/list";
         }else {
@@ -50,6 +73,7 @@ public class TokenController {
         }
 
     }
+
 
     public Map<String,String> getUser(String token){
         HashMap<String, String> map = new HashMap<>();

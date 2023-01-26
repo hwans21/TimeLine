@@ -1,16 +1,13 @@
 package TwitchToYoutube.timeline.entity;
 
 import TwitchToYoutube.timeline.enums.AuthType;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Table(name="USER")
+@Getter @Setter
+@Table(name="MEMBER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"userId","userLogin","userDisplay","userAuth"})
 public class User {
