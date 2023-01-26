@@ -1,11 +1,6 @@
 package TwitchToYoutube.timeline;
 
 import TwitchToYoutube.timeline.entity.Clip;
-import TwitchToYoutube.timeline.entity.Record;
-import TwitchToYoutube.timeline.entity.StreamCheck;
-import TwitchToYoutube.timeline.repository.ClipRepository;
-import TwitchToYoutube.timeline.repository.RecordRepository;
-import TwitchToYoutube.timeline.repository.StreamRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
