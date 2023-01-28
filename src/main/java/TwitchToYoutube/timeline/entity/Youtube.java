@@ -17,7 +17,7 @@ import java.util.Date;
 public class Youtube {
 
 
-    public Youtube(Long userId, String youtubeTitle, Date youtubeRecordStart, Long youtubeLength, String youtubeUrl) {
+    public Youtube(Long userId, String youtubeTitle, Date youtubeRecordStart, String youtubeLength, String youtubeUrl) {
         this.userId = userId;
         this.youtubeTitle = youtubeTitle;
         this.youtubeRecordStart = youtubeRecordStart;
@@ -44,7 +44,7 @@ public class Youtube {
 
 
     @Column(name="youtube_length")
-    private Long youtubeLength;
+    private String youtubeLength;
 
     @Column(name="youtube_url")
     private String youtubeUrl;

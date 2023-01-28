@@ -28,10 +28,7 @@ public class MenuContoller {
     public String createPage(){
         return "create_timeline";
     }
-    @GetMapping("/manage")
-    public String managePage(){
-        return "youtube_list";
-    }
+
 
 
 

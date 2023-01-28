@@ -18,54 +18,31 @@
           <th class="g-col-xs-2" scope="col">길이</th>
         </thead>
         <tbody>
-          <tr>
-            <td>22/01/20 23:00:00</td>
-            <td>테스트 제목입니다. 1</td>
-            <td>03:00:20</td>
+          <tr th:each="e: ${list}">
+            <td style="display:none;" th:text="${e.youtubeId}"></td>
+            <td th:text="${e.youtubeRecordStart}"></td>
+            <td th:text="${e.youtubeTitle}"></td>
+            <td th:text="${e.youtubeLength}"></td>
           </tr>
-          <tr>
-            <td>22/01/20 23:00:00</td>
-            <td>테스트 제목입니다. 2</td>
-            <td>03:00:20</td>
-          </tr>
-          <tr>
-            <td>22/01/20 23:00:00</td>
-            <td>테스트 제목입니다. 3</td>
-            <td>03:00:20</td>
-          </tr>
-          <tr>
-            <td>22/01/20 23:00:00</td>
-            <td>테스트 제목입니다. 4</td>
-            <td>03:00:20</td>
-          </tr>
-          <tr>
-            <td>22/01/20 23:00:00</td>
-            <td>테스트 제목입니다. 5</td>
-            <td>03:00:20</td>
-          </tr>
-          <tr>
-            <td>22/01/20 23:00:00</td>
-            <td>테스트 제목입니다. 6</td>
-            <td>03:00:20</td>
-          </tr>
-          
         </tbody>
       </table>
       <nav aria-label="Page navigation example">
         <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
+          <th:block th:if="${paging.isPrev}">
+            <li class="page-item">
+              <a class="page-link" th:href="@{/manage/{page}(page = ${#numbers.formatInteger(paging.currentPage,3)}-1)}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          </th:block>
+          <th:block th:if="${paging.isNext}">
+            <li class="page-item">
+              <a class="page-link" th:href="@{/manage/{page}(page = ${#numbers.formatInteger(paging.currentPage,3)}+1)}"  aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </th:block>
+
         </ul>
       </nav>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">

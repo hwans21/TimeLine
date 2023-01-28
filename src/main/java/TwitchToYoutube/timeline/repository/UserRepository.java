@@ -11,11 +11,22 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public Long save(User user){
-        em.persist(user);
-        return user.getUserId();
-    }
     public User find(Long id){
         return em.find(User.class, id);
     }
+
+    public void save(User vo){
+        em.persist(vo);
+    }
+
+//
+//    public void update(User vo){
+//
+//    }
+
+    public void delete(User vo){
+        em.remove(vo);
+    }
+
+
 }
