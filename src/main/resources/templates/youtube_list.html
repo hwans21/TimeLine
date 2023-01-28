@@ -75,25 +75,26 @@
     </form>
 
     <!-- create Modal -->
-    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">유튜브 등록</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <input type="text" class="form-control" placeholder="녹화를 시작한 시각(녹화파일이름 기준)">
-              <input type="text" class="form-control" placeholder="유튜브 제목">
-              <input type="text" class="form-control" placeholder="유튜브 링크">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">저장</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+    <form id="testinsert_form" method="post" th:action="@{/testinsert}">
+      <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">유튜브 등록</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" name="testdate" class="form-control" placeholder="녹화를 시작한 시각(녹화파일이름 기준)">
+                <input type="text" name="testurl" class="form-control" placeholder="유튜브 링크">
+            </div>
+            <div class="modal-footer">
+              <button id="testinsert_btn" type="button" class="btn btn-primary">저장</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
     
     <!-- modify Modal -->
     <div class="modal fade" id="modifyModal" tabindex="-2" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -105,7 +106,6 @@
           </div>
           <div class="modal-body">
             <input type="text" class="form-control" placeholder="녹화를 시작한 시각(녹화파일이름 기준)">
-            <input type="text" class="form-control" placeholder="유튜브 제목">
             <input type="text" class="form-control" placeholder="유튜브 링크">
           </div>
           <div class="modal-footer">
