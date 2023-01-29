@@ -18,7 +18,7 @@
           <th class="g-col-xs-2" scope="col">길이</th>
         </thead>
         <tbody>
-          <tr th:each="e: ${list}">
+          <tr th:each="e: ${list}" class="youtube">
             <td style="display:none;" th:text="${e.youtubeId}"></td>
             <td th:text="${e.youtubeRecordStart}"></td>
             <td th:text="${e.youtubeTitle}"></td>
@@ -52,7 +52,7 @@
     </form>
 
     <!-- create Modal -->
-    <form id="testinsert_form" method="post" th:action="@{/testinsert}">
+    <form id="youtubeInsertForm" method="post" th:action="@{/youtube_insert}">
       <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -65,7 +65,7 @@
                 <input type="text" name="testurl" class="form-control" placeholder="유튜브 링크">
             </div>
             <div class="modal-footer">
-              <button id="testinsert_btn" type="button" class="btn btn-primary">저장</button>
+              <button id="youtubeInsertBtn" type="button" class="btn btn-primary">저장</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
             </div>
           </div>
@@ -74,26 +74,28 @@
     </form>
     
     <!-- modify Modal -->
-    <div class="modal fade" id="modifyModal" tabindex="-2" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">유튜브 수정</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <input type="text" class="form-control" placeholder="녹화를 시작한 시각(녹화파일이름 기준)">
-            <input type="text" class="form-control" placeholder="유튜브 링크">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">저장</button>
-            <button type="button" class="btn btn-danger">삭제</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+    <form id="youtubeUpdateForm" method="post" th:action="@{/youtube_update}">
+      <div class="modal fade" id="modifyModal" tabindex="-2" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">유튜브 수정</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="modYoutubeId" name="id">
+              <input type="text" id="modYoutubeDateTxt" name="date" class="form-control" placeholder="녹화를 시작한 시각(녹화파일이름 기준)">
+              <input type="text" id="modYoutubeUrlTxt" name="url" class="form-control" placeholder="유튜브 링크">
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="youtubeUpdateBtn" class="btn btn-primary">저장</button>
+              <button type="button" id="youtubeRemoveBtn" class="btn btn-danger">삭제</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
+    </form>
 
 
 

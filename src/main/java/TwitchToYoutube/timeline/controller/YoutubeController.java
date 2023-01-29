@@ -1,7 +1,6 @@
 package TwitchToYoutube.timeline.controller;
 
 import TwitchToYoutube.timeline.entity.PageVO;
-import TwitchToYoutube.timeline.entity.User;
 import TwitchToYoutube.timeline.entity.Youtube;
 import TwitchToYoutube.timeline.manager.SessionManager;
 import TwitchToYoutube.timeline.repository.YoutubeRepository;
@@ -18,12 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public class YoutubeController {
     private YoutubeRepository repository;
 
     @Transactional
-    @PostMapping("/testinsert")
+    @PostMapping("/youtube_insert")
     public String insertYoutube(HttpServletRequest request){
         /*
             유저id, youtubetitle, youtubeRecordStarttime,
@@ -80,6 +79,60 @@ public class YoutubeController {
     }
 
 
+    @ResponseBody
+    @GetMapping("/youtube_find")
+    public Map<String, String> getYoutubeVO(@RequestParam String youtubeId){
+        System.out.println("/youtube_find?youtubeId="+youtubeId);
+        Youtube youtube = repository.find(Long.parseLong(youtubeId));
+        SimpleDateFormat format = new SimpleDateFormat("yyMMdd_HHmmss");
+        String startTime = format.format(youtube.getYoutubeRecordStart());
+        String youtubeUrl = youtube.getYoutubeUrl();
+        String modYoutubeId = Long.toString(youtube.getYoutubeId());
+        Map<String, String> map = new HashMap<>();
+        map.put("id", modYoutubeId);
+        map.put("time",startTime);
+        map.put("url", youtubeUrl);
+        return map;
+    }
+
+    @PostMapping("/youtube_update")
+    public String updateYoutube(HttpServletRequest request){
+        String referer = request.getHeader("Referer");
+        String path = "";
+        try {
+            URL url = new URL(referer);
+            path = url.getPath();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
+        Long userid = Long.parseLong(map.get("id"));
+        Long youtubeId = Long.parseLong(request.getParameter("id"));
+        String url = request.getParameter("url");
+        String recordStartTime = request.getParameter("date");
+        Youtube vo = getYoutubeVo(userid,recordStartTime,url);
+        vo.setYoutubeId(youtubeId);
+        repository.update(vo);
+        return "redirect:"+path;
+    }
+    @PostMapping("/youtube_remove")
+    public String removeYoutube(HttpServletRequest request){
+        String referer = request.getHeader("Referer");
+        String path = "";
+        try {
+            URL url = new URL(referer);
+            path = url.getPath();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
+        Long userid = Long.parseLong(map.get("id"));
+        Long youtubeId = Long.parseLong(request.getParameter("id"));
+
+        Youtube vo = repository.find(youtubeId);
+        repository.remove(vo);
+        return "redirect:"+path;
+    }
 
     public Map<String, String> getYoutubeInfo(String url){
         Map<String, String> map = new HashMap<>();

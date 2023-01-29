@@ -25,6 +25,9 @@ public class Youtube {
         this.youtubeUrl = youtubeUrl;
     }
 
+    public void setYoutubeId(Long youtubeId) {
+        this.youtubeId = youtubeId;
+    }
 
     @Id
     @Column(name="youtube_id")
