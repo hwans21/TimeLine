@@ -15,12 +15,12 @@ public class YoutubeRepository {
     @PersistenceContext
     private EntityManager em;
 
+    @Transactional
     public Long save(Youtube vo){
         em.persist(vo);
         return vo.getYoutubeId();
     }
     public Youtube find(Long id){
-
         return em.find(Youtube.class, id);
     }
 
