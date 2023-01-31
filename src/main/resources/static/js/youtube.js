@@ -1,3 +1,22 @@
+$('.table').on('click', 'tbody tr', function (e) {
+    var parentNode = $(e.target).parent();
+
+    var class_val = $(parentNode).attr('class');
+    var id = $(parentNode).children('td').eq(0).html();
+    console.log(id, class_val)
+    if(class_val == 'youtube'){
+        var result = youtube_find(id);
+        $('.modal-title').text('유튜브 수정')
+        $('.modal-body').html('<input type="hidden" id="youtubeId" name="id"><input type="text" id="youtubeDate" name="date" class="form-control" placeholder="녹화를 시작한 시각(녹화파일이름 기준)"><input type="text" id="youtubeURL" name="url" class="form-control" placeholder="유튜브 링크">');
+        $('.modal-footer').html('<button type="button" id="YupdateBtn" class="btn btn-primary">저장</button><button type="button" id="YremoveBtn" class="btn btn-danger">삭제</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>');
+        $('#youtubeId').val(result.id);
+        $('#youtubeDate').val(result.time);
+        $('#youtubeURL').val(result.url);
+    }
+    $('#modalfade').modal('show');
+})
+
+
 $(document).on('click','#YinsertBtn', function (e){
     $('#actionForm').attr('action', '/manage/insert');
     $('#actionForm').attr('method','post');
@@ -21,6 +40,7 @@ $('#showInsertBtn').on('click',function(e){
     $('#youtubeDate').val('')
     $('#youtubeURL').val('')
     $('.modal-title').text('유튜브 등록')
-
+    $('.modal-body').html('<input type="text" id="youtubeDate" name="date" class="form-control" placeholder="녹화를 시작한 시각(녹화파일이름 기준)"><input type="text" id="youtubeURL" name="url" class="form-control" placeholder="유튜브 링크">');
     $('.modal-footer').html('<button type="button" id="YinsertBtn" class="btn btn-primary">저장</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>');
 });
+

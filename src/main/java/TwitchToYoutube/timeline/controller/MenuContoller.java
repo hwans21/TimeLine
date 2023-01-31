@@ -15,19 +15,12 @@ public class MenuContoller {
 
     @GetMapping("/")
     public String indexPage(HttpServletRequest request, Model model){
-        return "list_timeline";
+        return "timeline_list";
     }
 
 //    ----------------------------------
 
-    @GetMapping("/list")
-    public String listPage(){
-        return "list_timeline";
-    }
-    @GetMapping("/create")
-    public String createPage(){
-        return "create_timeline";
-    }
+
 
 
 

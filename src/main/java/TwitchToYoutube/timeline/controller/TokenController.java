@@ -63,13 +63,13 @@ public class TokenController {
 
             }
             model.addAttribute("user",user);
-            return "redirect:/list";
+            return "redirect:/timeline";
         }else {
             System.out.println("===========ERROR===========");
             System.out.println("error : "+error);
             System.out.println("error_description : "+error_description);
             System.out.println("state : "+state);
-            return "list_timeline";
+            return "timeline_list";
         }
 
     }
