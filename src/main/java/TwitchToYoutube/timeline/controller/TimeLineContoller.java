@@ -32,8 +32,15 @@ public class TimeLineContoller {
         }else{
             return "실패";
         }
-
-
+    }
+    @ResponseBody
+    @PostMapping("/copylist")
+    public String selectCopyTimeLine(HttpServletRequest request, @RequestBody Map<String, String> map){
+        if(service.selectCopyTimeLine(request, map)) {
+            return "정상";
+        }else{
+            return "실패";
+        }
     }
 
 

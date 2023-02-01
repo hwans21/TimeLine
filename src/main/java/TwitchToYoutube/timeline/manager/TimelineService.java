@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -41,4 +42,18 @@ public class TimelineService {
             return false;
         }
     }
+    public boolean selectCopyTimeLine(HttpServletRequest request, Map<String, String> map){
+        try{
+            Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
+            Long userid = Long.parseLong(user.get("id"));
+            String start = map.get("start");
+            String time = map.get("time");
+
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

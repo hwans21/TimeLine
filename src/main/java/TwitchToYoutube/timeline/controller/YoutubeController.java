@@ -43,6 +43,7 @@ public class YoutubeController {
         PageVO vo = service.getPageVO(pageNum);
         List<Youtube> list = service.getYoutubeList(vo);
         model.addAttribute("list",list);
+        System.out.println(list.get(0).getYoutubeRecordStart());
         model.addAttribute("paging",vo);
         return "youtube_list";
     }

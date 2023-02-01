@@ -14,6 +14,7 @@ $(document).on('click','#TinsertBtn', function(e){
 });
 $(document).on('keydown','#timelineTxt',function(e){
     if(e.keyCode === 13){
+        $('#actionForm').attr('onsubmit', 'return false');
         var time = $('#currentTime').val();
         var title = $('#timelineTxt').val();
         timeline_insert(time, title);
