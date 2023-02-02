@@ -17,7 +17,7 @@
       <tbody>
         <tr th:each="e: ${list}" class="youtube">
           <td style="display:none;" th:text="${e.youtubeId}"></td>
-          <td th:text="${e.youtubeRecordStart}"></td>
+          <td th:text="${#dates.format(e.youtubeRecordStart, 'yyMMdd_HHmmss')}"></td>
           <td th:text="${e.youtubeTitle}"></td>
           <td th:text="${e.youtubeLength}"></td>
           <td><button type="button" class="btn btn-primary YmodifyBtn">수정</button></td>

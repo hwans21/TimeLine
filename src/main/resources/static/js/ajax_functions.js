@@ -13,7 +13,7 @@ function youtube_find(id) {
 }
 
 function timeline_insert(time,title){
-    console.log(time,title)
+    console.log(time,title);
     $.ajax({
         type:'post',
         data: JSON.stringify({
@@ -27,4 +27,24 @@ function timeline_insert(time,title){
             console.log(data)
         }
     });
+}
+
+function timeline_find(start, time){
+    console.log(start,time);
+    var result;
+    $.ajax({
+        type:'post',
+        data: JSON.stringify({
+            'start':start,
+            'time':time
+        }),
+        url: '/timeline/copylist',
+        headers: {'Content-Type': 'application/json'},
+        async: false,
+        success: function(data) {
+            console.log(data)
+            result = data;
+        }
+    });
+    return result;
 }

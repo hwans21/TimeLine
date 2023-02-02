@@ -26,15 +26,22 @@ public class TimelineRepository {
     }
 
     public List<Timeline> copylist(Map<String, Object> map){
-        Long userid = (Long) map.get("id");
+        Long userid = (Long) map.get("userid");
         Date start = (Date) map.get("start");
         Date end = (Date) map.get("end");
-
-        String sql = "SELECT * FROM (SELECT t FROM Timeline t " +
-                "WHERE t.userId = :userId ) as F " +
-                "B" +
-
-        return em.createQuery(sql)
-                .setParameter();
+        String sql = "SELECT t FROM Timeline t " +
+                "WHERE t.userId = :userId AND " +
+                "t.timelineTime BETWEEN :start AND :end ";
+        List<Timeline> list = em.createQuery(sql, Timeline.class)
+                .setParameter("userId", userid)
+                .setParameter("start",start)
+                .setParameter("end",end)
+                .getResultList();
+        for(Timeline t : list){
+            int diffSec = (int) ((t.getTimelineTime().getTime() - start.getTime()) / 1000);
+            t.setTimelineSec(diffSec);
+        }
+        return list;
     }
+
 }

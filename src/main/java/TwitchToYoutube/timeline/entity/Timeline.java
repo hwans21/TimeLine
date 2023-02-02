@@ -1,9 +1,6 @@
 package TwitchToYoutube.timeline.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,16 +9,15 @@ import java.util.Date;
 @Getter
 @Table(name="TIMELINE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"timelineId","userId","timelineTitle","timelineTime","timelineCount","timelineSec"})
+@ToString(of = {"timelineId","userId","timelineTitle","timelineTime","timelineCount"})
 public class Timeline {
 
 
-    public Timeline(Long userId, String timelineTitle, Date timelineTime, Long timelineCount, Long timelineSec) {
+    public Timeline(Long userId, String timelineTitle, Date timelineTime, Long timelineCount) {
         this.userId = userId;
         this.timelineTitle = timelineTitle;
         this.timelineTime = timelineTime;
         this.timelineCount = timelineCount;
-        this.timelineSec = timelineSec;
     }
 
     @Id
@@ -42,8 +38,11 @@ public class Timeline {
     @Column(name="timeline_count")
     private Long timelineCount;
 
-    @Column(name="timeline_sec")
-    private Long timelineSec;
+    @Setter
+    @Transient
+    private int timelineSec;
+
+
 
 
 }

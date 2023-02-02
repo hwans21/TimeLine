@@ -2,6 +2,7 @@ package TwitchToYoutube.timeline.manager;
 
 import TwitchToYoutube.timeline.entity.PageVO;
 import TwitchToYoutube.timeline.entity.Youtube;
+import TwitchToYoutube.timeline.repository.TimelineRepository;
 import TwitchToYoutube.timeline.repository.YoutubeRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -33,6 +34,8 @@ public class YoutubeService {
     private final SessionManager sessionManager;
     @Autowired
     private YoutubeRepository repository;
+
+    private Common common;
     public boolean insertService(HttpServletRequest request){
         try{
             Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
@@ -41,6 +44,7 @@ public class YoutubeService {
             String recordStartTime = request.getParameter("date");
             Youtube vo = getYoutubeVo(userid,recordStartTime,url);
             repository.save(vo);
+
             return true;
         } catch (Exception e){
             return false;
@@ -161,31 +165,11 @@ public class YoutubeService {
 
         Map<String, String> youtubeInfo = getYoutubeInfo(url);
         String youtubeTitle = youtubeInfo.get("title");
-        String youtubeLength = secondToStr(Integer.parseInt(youtubeInfo.get("length")));
+        String youtubeLength = common.secondToStr(Integer.parseInt(youtubeInfo.get("length")));
         Youtube vo = new Youtube(userId,youtubeTitle,date,youtubeLength,url);
-
         return vo;
     }
 
-    public String secondToStr(int second){
-        String result="";
-        result += (second/3600 < 10) ? "0"+second/3600 : ""+second/3600;
-        result += ":";
-        second = second % 3600;
-        result += (second/60 < 10) ? "0"+second/60 : ""+second/60;
-        result += ":";
-        second = second % 60;
-        result += (second < 10) ? "0"+second : ""+second;
-        return result;
-    }
 
-    public int strToSecond(String str){
-        int result = 0;
-        String[] split = str.split(":");
-        result += Integer.parseInt(split[0])*3600;
-        result += Integer.parseInt(split[1])*60;
-        result += Integer.parseInt(split[2]);
-        return result;
-    }
 
 }

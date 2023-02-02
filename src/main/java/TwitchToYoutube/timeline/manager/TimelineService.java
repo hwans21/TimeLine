@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +20,8 @@ public class TimelineService {
     private final SessionManager sessionManager;
     @Autowired
     private TimelineRepository repository;
+
+    private Common common;
     public boolean insertTimeline(HttpServletRequest request, Map<String, String> map){
         try{
             Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
@@ -34,7 +35,7 @@ public class TimelineService {
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
             }
-            Timeline vo = new Timeline(userid, title, date, 0L, -1L);
+            Timeline vo = new Timeline(userid, title, date, 0L);
             repository.save(vo);
             return true;
         } catch (Exception e){
@@ -42,18 +43,29 @@ public class TimelineService {
             return false;
         }
     }
-    public boolean selectCopyTimeLine(HttpServletRequest request, Map<String, String> map){
+    public List<Timeline> selectCopyTimeLine(HttpServletRequest request, Map<String, String> map){
+        List<Timeline> list = null;
+        Map<String, Object> requestMap = new HashMap<>();
         try{
             Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
             Long userid = Long.parseLong(user.get("id"));
-            String start = map.get("start");
             String time = map.get("time");
+            SimpleDateFormat format = new SimpleDateFormat("yyMMdd_HHmmss");
+            Date start = format.parse(map.get("start"));
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(start);
+            cal.add(Calendar.SECOND, common.strToSecond(time));
+            Date end = cal.getTime();
+            requestMap.put("userid", userid);
+            requestMap.put("start", start);
+            requestMap.put("end", end);
+            list = repository.copylist(requestMap);
 
-            return true;
         } catch (Exception e){
             e.printStackTrace();
-            return false;
         }
+        System.out.println(list.size());
+        return list;
     }
 
 }
