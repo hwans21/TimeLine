@@ -1,6 +1,7 @@
 package TwitchToYoutube.timeline.repository;
 
 import TwitchToYoutube.timeline.entity.PageVO;
+import TwitchToYoutube.timeline.entity.Timeline;
 import TwitchToYoutube.timeline.entity.Youtube;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +58,12 @@ public class YoutubeRepository {
 
     @Transactional
     public void remove(Youtube vo){
+        String sql = "UPDATE FROM Timeline t " +
+                "SET t.youtubeId.youtubeId = null " +
+                "where t.youtubeId.youtubeId = :youtubeId";
+        em.createQuery(sql)
+                .setParameter("youtubeId", vo.getYoutubeId())
+                .executeUpdate();
         em.remove(vo);
     }
 

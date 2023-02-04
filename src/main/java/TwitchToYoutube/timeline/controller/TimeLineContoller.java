@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,9 +47,41 @@ public class TimeLineContoller {
             result += common.secondToStr(t.getTimelineSec())+" ";
             result += t.getTimelineTitle() +"\n";
         }
-
+        if(list.size()==0) result=" ";
         return result;
     }
+    @ResponseBody
+    @PostMapping("/list")
+    public List<Timeline> timelineList(HttpServletRequest request, @RequestBody Map<String, String> map){
+        List<Timeline> list = null;
+        String start = map.get("start");
+        String end = map.get("end");
+        String order = map.get("order");
+
+        int pageNum = Integer.parseInt(map.get("pageNum"));
+        list = service.getList(start, end, order, pageNum);
+        for(Timeline t : list){
+            SimpleDateFormat format = new SimpleDateFormat("yyMMdd_HHmmss");
+            t.setTimeFormat(format.format(t.getTimelineTime()));
+        }
+
+        return list;
+    }
+
+    @ResponseBody
+    @PostMapping("/countup")
+    public String countup(HttpServletRequest request, @RequestBody Map<String, String> map){
+        try{
+            String idstr = map.get("id");
+            Long id = Long.parseLong(idstr);
+            service.countup(id);
+            return "성공";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "실패";
+        }
+        
 
 
+    }
 }

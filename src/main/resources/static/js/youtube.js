@@ -1,11 +1,11 @@
-$('.table').on('click', 'tbody tr', function (e) {
+$('.youtube').on('click', 'tbody tr', function (e) {
     var tr = $(e.target).parent();
     var id = $(tr).children('td').eq(0).html();
     var start = $(tr).children('td').eq(1).html();
     var time =  $(tr).children('td').eq(3).html();
     console.log(id, start, time);
     var result = youtube_find(id);
-    copy(timeline_find(start, time));
+    copy(timeline_copyfind(start, time));
     location.href=result.url;
 });
 
@@ -19,7 +19,6 @@ function copy(text){
     document.execCommand('copy');
     document.body.removeChild($textarea);
 }
-
 $(document).on('click','.YmodifyBtn', function (e){
     var parentNode = $(e.target).parent().parent();
     var id = $(parentNode).children('td').eq(0).html();

@@ -8,7 +8,7 @@ public class TimelineApplication {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(TimelineApplication.class, args);
+ 		SpringApplication.run(TimelineApplication.class, args);
 
 	}
 

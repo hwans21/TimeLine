@@ -1,8 +1,10 @@
 package TwitchToYoutube.timeline.manager;
 
 import TwitchToYoutube.timeline.entity.PageVO;
+import TwitchToYoutube.timeline.entity.User;
 import TwitchToYoutube.timeline.entity.Youtube;
 import TwitchToYoutube.timeline.repository.TimelineRepository;
+import TwitchToYoutube.timeline.repository.UserRepository;
 import TwitchToYoutube.timeline.repository.YoutubeRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -22,10 +24,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +33,12 @@ public class YoutubeService {
     private final SessionManager sessionManager;
     @Autowired
     private YoutubeRepository repository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TimelineRepository timelineRepository;
 
     private Common common;
     public boolean insertService(HttpServletRequest request){
@@ -44,7 +49,10 @@ public class YoutubeService {
             String recordStartTime = request.getParameter("date");
             Youtube vo = getYoutubeVo(userid,recordStartTime,url);
             repository.save(vo);
-
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(vo.getYoutubeRecordStart());
+            cal.add(Calendar.SECOND, common.strToSecond(vo.getYoutubeLength()));
+            timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime());
             return true;
         } catch (Exception e){
             return false;
@@ -134,6 +142,11 @@ public class YoutubeService {
         Youtube vo = getYoutubeVo(userid,recordStartTime,url);
         vo.setYoutubeId(youtubeId);
         repository.update(vo);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(vo.getYoutubeRecordStart());
+        cal.add(Calendar.SECOND, common.strToSecond(vo.getYoutubeLength()));
+        timelineRepository.updateNotTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime());
+        timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime());
         return "redirect:"+path;
     }
     public String removeYoutube(HttpServletRequest request){
@@ -162,11 +175,11 @@ public class YoutubeService {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-
+        User user = userRepository.find(userId);
         Map<String, String> youtubeInfo = getYoutubeInfo(url);
         String youtubeTitle = youtubeInfo.get("title");
         String youtubeLength = common.secondToStr(Integer.parseInt(youtubeInfo.get("length")));
-        Youtube vo = new Youtube(userId,youtubeTitle,date,youtubeLength,url);
+        Youtube vo = new Youtube(user,youtubeTitle,date,youtubeLength,url);
         return vo;
     }
 

@@ -17,7 +17,7 @@ import java.util.Date;
 public class Youtube {
 
 
-    public Youtube(Long userId, String youtubeTitle, Date youtubeRecordStart, String youtubeLength, String youtubeUrl) {
+    public Youtube(User userId, String youtubeTitle, Date youtubeRecordStart, String youtubeLength, String youtubeUrl) {
         this.userId = userId;
         this.youtubeTitle = youtubeTitle;
         this.youtubeRecordStart = youtubeRecordStart;
@@ -35,9 +35,6 @@ public class Youtube {
                 generator = "youtube_seq")
     private Long youtubeId;
 
-    @Column(name="user_id")
-    private Long userId;
-
     @Column(name="youtube_title")
     private String youtubeTitle;
 
@@ -51,4 +48,8 @@ public class Youtube {
 
     @Column(name="youtube_url")
     private String youtubeUrl;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User userId;
 }

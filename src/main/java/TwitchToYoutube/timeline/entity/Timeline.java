@@ -13,7 +13,7 @@ import java.util.Date;
 public class Timeline {
 
 
-    public Timeline(Long userId, String timelineTitle, Date timelineTime, Long timelineCount) {
+    public Timeline(User userId, String timelineTitle, Date timelineTime, Long timelineCount) {
         this.userId = userId;
         this.timelineTitle = timelineTitle;
         this.timelineTime = timelineTime;
@@ -26,9 +26,6 @@ public class Timeline {
             generator = "timeline_seq")
     private Long timelineId;
 
-    @Column(name="user_id")
-    private Long userId;
-
     @Column(name="timeline_title")
     private String timelineTitle;
 
@@ -38,10 +35,21 @@ public class Timeline {
     @Column(name="timeline_count")
     private Long timelineCount;
 
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User userId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="youtube_id")
+    private Youtube youtubeId;
+
     @Setter
     @Transient
     private int timelineSec;
 
+    @Setter
+    @Transient
+    private String timeFormat;
 
 
 

@@ -1,8 +1,12 @@
 package TwitchToYoutube.timeline.repository;
 
+import TwitchToYoutube.timeline.entity.PageVO;
+import TwitchToYoutube.timeline.entity.QTimeline;
 import TwitchToYoutube.timeline.entity.Timeline;
 import TwitchToYoutube.timeline.entity.Youtube;
 import TwitchToYoutube.timeline.manager.SessionManager;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +46,89 @@ public class TimelineRepository {
             t.setTimelineSec(diffSec);
         }
         return list;
+    }
+
+    public List<Timeline> getList(Date start, Date end, String order, int pageNum){
+        List<Timeline> list = null;
+        try{
+
+            String sql = "";
+            if(order.equals("time")){
+                sql = "SELECT t FROM Timeline t " +
+                        "WHERE t.timelineTime BETWEEN :start AND :end " +
+                        "AND t.youtubeId.youtubeId IS NOT NULL " +
+                        "ORDER BY t.timelineTime DESC";
+            } else if(order.equals("count")){
+                sql = "SELECT t FROM Timeline t " +
+                        "WHERE t.timelineTime BETWEEN :start AND :end " +
+                        "AND t.youtubeId.youtubeId IS NOT NULL " +
+                        "ORDER BY t.timelineCount DESC";
+            }
+            PageVO vo = new PageVO(pageNum, 10);
+
+            list = em.createQuery(sql, Timeline.class)
+                    .setParameter("start", start)
+                    .setParameter("end",end)
+                    .setFirstResult((vo.getCurrentPage()-1)*vo.getPageOfCount())
+                    .setMaxResults(vo.getPageOfCount())
+                    .getResultList();
+            for(Timeline t : list){
+                int diffSec = (int) ((t.getTimelineTime().getTime() - t.getYoutubeId().getYoutubeRecordStart().getTime()) / 1000);
+                t.setTimelineSec(diffSec);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    @Transactional
+    public int countup(Long id){
+        String sql = "UPDATE FROM Timeline t " +
+                "SET t.timelineCount = t.timelineCount + 1 " +
+                "WHERE t.timelineId = :timelineId";
+        return em.createQuery(sql)
+                .setParameter("timelineId",id)
+                .executeUpdate();
+    }
+
+    @Transactional
+    public int updateTimeline(Youtube youtubeId, Date start, Date end){
+        String sql = "UPDATE FROM Timeline t " +
+                "SET t.youtubeId.youtubeId = :youtubeId " +
+                "WHERE t.timelineTime BETWEEN :start AND :end ";
+
+        return em.createQuery(sql)
+                .setParameter("youtubeId",youtubeId.getYoutubeId())
+                .setParameter("start",start)
+                .setParameter("end",end)
+                .executeUpdate();
+    }
+    @Transactional
+    public int updateNotTimeline(Youtube youtubeId, Date start, Date end){
+
+        List<Timeline> list =  em.createQuery("Select t FROM Timeline t " +
+                "WHERE t.youtubeId.youtubeId = :youtubeId " +
+                "AND ( t.timelineTime < :start " +
+                "OR t.timelineTime > :end ) ", Timeline.class)
+                .setParameter("youtubeId",youtubeId.getYoutubeId())
+                .setParameter("start",start)
+                .setParameter("end",end)
+                .getResultList();
+        System.out.println(list.size());
+
+
+        String sql = "UPDATE FROM Timeline t " +
+                "SET t.youtubeId.youtubeId = null " +
+                "WHERE t.youtubeId.youtubeId = :youtubeId " +
+                "AND ( t.timelineTime < :start " +
+                "OR t.timelineTime > :end )";
+        return em.createQuery(sql)
+                .setParameter("youtubeId",youtubeId.getYoutubeId())
+                .setParameter("start",start)
+                .setParameter("end",end)
+                .executeUpdate();
     }
 
 }

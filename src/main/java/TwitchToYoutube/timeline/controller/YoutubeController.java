@@ -32,6 +32,7 @@ public class YoutubeController {
     @Autowired
     private YoutubeService service;
 
+
     @PostMapping("/insert")
     public String insertYoutube(HttpServletRequest request){
         String referer = request.getHeader("Referer");
@@ -43,7 +44,6 @@ public class YoutubeController {
         PageVO vo = service.getPageVO(pageNum);
         List<Youtube> list = service.getYoutubeList(vo);
         model.addAttribute("list",list);
-        System.out.println(list.get(0).getYoutubeRecordStart());
         model.addAttribute("paging",vo);
         return "youtube_list";
     }
