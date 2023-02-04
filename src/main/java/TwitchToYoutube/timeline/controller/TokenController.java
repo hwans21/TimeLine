@@ -4,6 +4,7 @@ import TwitchToYoutube.timeline.entity.User;
 import TwitchToYoutube.timeline.enums.AuthType;
 import TwitchToYoutube.timeline.manager.SessionManager;
 import TwitchToYoutube.timeline.repository.UserRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -60,7 +62,6 @@ public class TokenController {
             }else if(!user.get("login").equals(u.getUserLogin()) || !user.get("display_name").equals(u.getUserDisplay())){
                u.setUserLogin(user.get("login"));
                u.setUserDisplay(user.get("display_name"));
-
             }
             model.addAttribute("user",user);
             return "redirect:/timeline";
@@ -74,6 +75,21 @@ public class TokenController {
 
     }
 
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response, Model model){
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                // 쿠키의 유효시간을 0으로 설정하여 바로 만료시킨다.
+                cookies[i].setMaxAge(0);
+                // 응답에 쿠키 추가
+                response.addCookie(cookies[i]);
+            }
+        }
+        model.addAttribute("user",null);
+        return "redirect:/timeline";
+    }
 
     public Map<String,String> getUser(String token){
         HashMap<String, String> map = new HashMap<>();
