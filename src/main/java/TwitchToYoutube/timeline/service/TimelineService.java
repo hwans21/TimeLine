@@ -1,16 +1,13 @@
-package TwitchToYoutube.timeline.manager;
+package TwitchToYoutube.timeline.service;
 
-import TwitchToYoutube.timeline.entity.PageVO;
 import TwitchToYoutube.timeline.entity.Timeline;
 import TwitchToYoutube.timeline.entity.User;
-import TwitchToYoutube.timeline.entity.Youtube;
+import TwitchToYoutube.timeline.manager.SessionManager;
 import TwitchToYoutube.timeline.repository.TimelineRepository;
 import TwitchToYoutube.timeline.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -27,7 +24,7 @@ public class TimelineService {
 
     @Autowired
     private UserRepository userRepository;
-    private Common common;
+    private CommonService common;
     public boolean insertTimeline(HttpServletRequest request, Map<String, String> map){
         try{
             Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);

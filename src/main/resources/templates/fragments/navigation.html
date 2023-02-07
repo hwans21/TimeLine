@@ -22,20 +22,11 @@
               <i class="bi bi-clipboard2-data"></i>
             </a>
           </li>
-          <th:block th:if="${user == null}">
-            <li class="nav-item">
-              <a class="nav-link" href="https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=jcmj66qmli9btfjppfvoxnh1i46vjt&redirect_uri=http://192.168.0.9:8080/login&scope=user%3Aread%3Aemail&state=c3ab8aa609ea11e793ae92361f002671">
-                로그인
-              </a>
-            </li>
-          </th:block>
-          <th:block th:if="${user != null}">
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{/logout}">
-                로그아웃
-              </a>
-            </li>
-          </th:block>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/logout}">
+              로그아웃
+            </a>
+          </li>
         </ul>
       </div>
     </div>

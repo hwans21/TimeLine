@@ -1,8 +1,9 @@
-package TwitchToYoutube.timeline.manager;
+package TwitchToYoutube.timeline.service;
 
 import TwitchToYoutube.timeline.entity.PageVO;
 import TwitchToYoutube.timeline.entity.User;
 import TwitchToYoutube.timeline.entity.Youtube;
+import TwitchToYoutube.timeline.manager.SessionManager;
 import TwitchToYoutube.timeline.repository.TimelineRepository;
 import TwitchToYoutube.timeline.repository.UserRepository;
 import TwitchToYoutube.timeline.repository.YoutubeRepository;
@@ -17,7 +18,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class YoutubeService {
     @Autowired
     private TimelineRepository timelineRepository;
 
-    private Common common;
+    private CommonService common;
     public boolean insertService(HttpServletRequest request){
         try{
             Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);

@@ -1,9 +1,9 @@
 package TwitchToYoutube.timeline.controller;
 
 import TwitchToYoutube.timeline.entity.Timeline;
-import TwitchToYoutube.timeline.manager.Common;
+import TwitchToYoutube.timeline.service.CommonService;
 import TwitchToYoutube.timeline.manager.SessionManager;
-import TwitchToYoutube.timeline.manager.TimelineService;
+import TwitchToYoutube.timeline.service.TimelineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TimeLineContoller {
 
-    private Common common;
+    private CommonService common;
     private final SessionManager sessionManager;
     @Autowired
     private TimelineService service;

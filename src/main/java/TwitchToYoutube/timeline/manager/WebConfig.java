@@ -18,7 +18,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authHandlerIntercepter)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/","/login","/timeline","/timeline/**","/js/**","/css/**");
+                .excludePathPatterns("/","/login","/loginStart","/img/**","/js/login.js");
     }
 
 }

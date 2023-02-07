@@ -2,9 +2,11 @@ package TwitchToYoutube.timeline.repository;
 
 import TwitchToYoutube.timeline.entity.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 
 @Repository
 public class UserRepository {
@@ -15,8 +17,10 @@ public class UserRepository {
         return em.find(User.class, id);
     }
 
-    public void save(User vo){
+    @Transactional
+    public Long save(User vo){
         em.persist(vo);
+        return vo.getUserId();
     }
 
 //

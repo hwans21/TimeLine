@@ -1,97 +1,45 @@
-package TwitchToYoutube.timeline.controller;
+package TwitchToYoutube.timeline.service;
 
-import TwitchToYoutube.timeline.entity.User;
-import TwitchToYoutube.timeline.enums.AuthType;
-import TwitchToYoutube.timeline.manager.SessionManager;
-import TwitchToYoutube.timeline.repository.UserRepository;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
-@RequiredArgsConstructor
-public class TokenController {
+public class CommonService {
     private static final String clientId = "jcmj66qmli9btfjppfvoxnh1i46vjt";
-    private final SessionManager sessionManager;
-
-    @Autowired
-    UserRepository repository;
-
-    @Transactional
-    @GetMapping("/login")
-    public String login(HttpServletRequest request, HttpServletResponse response, Model model){
-        String code = request.getParameter("code");
-        String scope = request.getParameter("scope");
-        String state = request.getParameter("state");
-        String error = request.getParameter("error");
-        String error_description = request.getParameter("error_description");
-        if(code != null) {
-            String token = getToken(code);
-            Map<String, String> user = getUser(token);
-            sessionManager.createSession(user, response);
-//            map.put("display_name",(String) dataJobj.get("display_name"));
-//            map.put("login",(String) dataJobj.get("login"));
-//            map.put("id",(String) dataJobj.get("id"));
-
-            User u = repository.find(Long.parseLong(user.get("id")));
-            // 테이블에 유저가 없다면 insert
-            if(u == null){
-                User in = new User(Long.parseLong(user.get("id")),user.get("login"), user.get("display_name"), AuthType.WATCHER);
-                repository.save(in);
-
-            // login_id 및 display_name이 변경되었을 경우 update
-            }else if(!user.get("login").equals(u.getUserLogin()) || !user.get("display_name").equals(u.getUserDisplay())){
-               u.setUserLogin(user.get("login"));
-               u.setUserDisplay(user.get("display_name"));
-            }
-            model.addAttribute("user",user);
-            return "redirect:/timeline";
-        }else {
-            System.out.println("===========ERROR===========");
-            System.out.println("error : "+error);
-            System.out.println("error_description : "+error_description);
-            System.out.println("state : "+state);
-            return "timeline_list";
-        }
-
+    public static String secondToStr(int second){
+        String result="";
+        result += (second/3600 < 10) ? "0"+second/3600 : ""+second/3600;
+        result += ":";
+        second = second % 3600;
+        result += (second/60 < 10) ? "0"+second/60 : ""+second/60;
+        result += ":";
+        second = second % 60;
+        result += (second < 10) ? "0"+second : ""+second;
+        return result;
     }
 
-
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request,HttpServletResponse response, Model model){
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                // 쿠키의 유효시간을 0으로 설정하여 바로 만료시킨다.
-                cookies[i].setMaxAge(0);
-                // 응답에 쿠키 추가
-                response.addCookie(cookies[i]);
-            }
-        }
-        model.addAttribute("user",null);
-        return "redirect:/timeline";
+    public static int strToSecond(String str){
+        int result = 0;
+        String[] split = str.split(":");
+        result += Integer.parseInt(split[0])*3600;
+        result += Integer.parseInt(split[1])*60;
+        result += Integer.parseInt(split[2]);
+        return result;
     }
 
-    public Map<String,String> getUser(String token){
+    public static Map<String,String> getUser(String token){
         HashMap<String, String> map = new HashMap<>();
 
         Map<String, String> headers = new HashMap<>();
@@ -117,7 +65,7 @@ public class TokenController {
         return map;
 
     }
-    public String getToken(String code){
+    public static String getToken(String code){
         String token="";
         HashMap<String, String> headers = new HashMap<>();
         HashMap<String, String> datas = new HashMap<>();
@@ -125,7 +73,7 @@ public class TokenController {
         datas.put("client_secret", getSecretkey());
         datas.put("code",code);
         datas.put("grant_type","authorization_code");
-        datas.put("redirect_uri","http://192.168.0.9:8080/getNick");
+        datas.put("redirect_uri","http://192.168.0.9:8080/login");
         String response = getRequest("https://id.twitch.tv/oauth2/token", headers, datas, "post");
         JSONParser parser = new JSONParser();
         JSONObject jobj = null;
@@ -261,6 +209,15 @@ public class TokenController {
     }
 
 
+    public static Cookie findCookie(HttpServletRequest request, String cookieName) {
 
+        if (request.getCookies() == null) {
+            return null;
+        }
 
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(cookieName))
+                .findAny()
+                .orElse(null);
+    }
 }

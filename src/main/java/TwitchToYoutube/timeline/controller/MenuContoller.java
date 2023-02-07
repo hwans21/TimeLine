@@ -15,7 +15,7 @@ public class MenuContoller {
 
     @GetMapping("/")
     public String indexPage(HttpServletRequest request, Model model){
-        return "timeline_list";
+        return "login";
     }
 
 //    ----------------------------------
