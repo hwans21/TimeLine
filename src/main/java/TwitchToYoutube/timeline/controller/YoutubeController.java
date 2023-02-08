@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -33,12 +34,14 @@ public class YoutubeController {
     private CommonService common;
 
     @GetMapping("/{pageNum}")
-    public String managePage(Model model,@PathVariable("pageNum") int pageNum){
+    public String managePage(HttpServletRequest request,Model model, @PathVariable("pageNum") int pageNum){
 
         PageVO vo = service.getPageVO(pageNum);
         List<Youtube> list = service.getYoutubeList(vo);
         model.addAttribute("list",list);
         model.addAttribute("paging",vo);
+        Cookie cookie = sessionManager.findCookie(request, "streamer");
+        model.addAttribute("streamer",cookie.getValue());
         return "youtube_list";
     }
 

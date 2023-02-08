@@ -12,7 +12,9 @@
         <th class="g-col-xs-2" scope="col">시작시간</th>
         <th class="g-col-xs-8" scope="col">제목</th>
         <th class="g-col-xs-2" scope="col">길이</th>
-        <th class="g-col-xs-2" scope="col">버튼</th>
+        <th:block th:if="${streamer==user.login}">
+          <th class="g-col-xs-2" scope="col">버튼</th>
+        </th:block>
       </thead>
       <tbody>
         <tr th:each="e: ${list}" class="youtube">
@@ -20,7 +22,10 @@
           <td th:text="${#dates.format(e.youtubeRecordStart, 'yyMMdd_HHmmss')}"></td>
           <td th:text="${e.youtubeTitle}"></td>
           <td th:text="${e.youtubeLength}"></td>
-          <td><button type="button" class="btn btn-primary YmodifyBtn">수정</button></td>
+          <th:block th:if="${streamer==user.login}">
+            <td><button type="button" class="btn btn-primary YmodifyBtn">수정</button></td>
+          </th:block>
+
         </tr>
       </tbody>
     </table>
@@ -44,8 +49,9 @@
       </ul>
     </nav>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <button id="showInsertBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalfade">등록</button>
-      <button id="showtimeLineBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalfade">타임라인 등록</button>
+      <th:block th:if="${streamer==user.login}">
+        <button id="showInsertBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalfade">등록</button>
+      </th:block>
     </div>
 
     <!-- Action Modal -->
