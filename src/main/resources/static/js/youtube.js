@@ -41,14 +41,14 @@ $(document).on('click','#YinsertBtn', function (e){
 
 $(document).on('click','#YupdateBtn',function (e){
     $('#actionForm').removeAttr('onsubmit');
-    $('#actionForm').attr('action', '/manage/update')
+    $('#actionForm').attr('action', '/manage/update');
     $('#actionForm').attr('method','post');
     $('#actionForm').submit();
 });
 
 $(document).on('click','#YremoveBtn',function (e){
     $('#actionForm').removeAttr('onsubmit');
-    $('#actionForm').attr('action', '/manage/remove')
+    $('#actionForm').attr('action', '/manage/remove');
     $('#actionForm').attr('method','post');
     $('#actionForm').submit();
 });

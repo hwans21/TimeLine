@@ -48,22 +48,25 @@ public class YoutubeService {
             String url = request.getParameter("url");
             String recordStartTime = request.getParameter("date");
             Youtube vo = getYoutubeVo(userid,recordStartTime,url);
+            vo.setYoutubeStremaer(sessionManager.findCookie(request,"streamer").getValue());
             repository.save(vo);
             Calendar cal = Calendar.getInstance();
             cal.setTime(vo.getYoutubeRecordStart());
             cal.add(Calendar.SECOND, common.strToSecond(vo.getYoutubeLength()));
-            timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime());
+            String streamer = sessionManager.findCookie(request,"streamer").getValue();
+            timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime(),streamer);
             return true;
         } catch (Exception e){
             return false;
         }
 
     }
-    public PageVO getPageVO(int num){
+    public PageVO getPageVO(HttpServletRequest request, int num){
+        String streamer = sessionManager.findCookie(request,"streamer").getValue();
         PageVO vo = new PageVO(num, 10);
         PageVO vo2 = new PageVO(num+1, 10);
-        List<Youtube> list = getYoutubeList(vo);
-        List<Youtube> list2 = getYoutubeList(vo2);
+        List<Youtube> list = getYoutubeList(vo,streamer);
+        List<Youtube> list2 = getYoutubeList(vo2,streamer);
         if (num > 1) {
             vo.setPrev(true);
         } else {
@@ -89,8 +92,8 @@ public class YoutubeService {
         map.put("url", youtubeUrl);
         return map;
     }
-    public List<Youtube> getYoutubeList(PageVO vo){
-       return repository.getList(vo);
+    public List<Youtube> getYoutubeList(PageVO vo, String streamer){
+       return repository.getList(vo,streamer);
     }
     public Map<String, String> getYoutubeInfo(String url){
         Map<String, String> map = new HashMap<>();
@@ -134,6 +137,7 @@ public class YoutubeService {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+        String streamer = sessionManager.findCookie(request, "streamer").getValue();
         Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
         Long userid = Long.parseLong(map.get("id"));
         Long youtubeId = Long.parseLong(request.getParameter("id"));
@@ -145,8 +149,8 @@ public class YoutubeService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(vo.getYoutubeRecordStart());
         cal.add(Calendar.SECOND, common.strToSecond(vo.getYoutubeLength()));
-        timelineRepository.updateNotTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime());
-        timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime());
+        timelineRepository.updateNotTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime(), streamer);
+        timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime(), streamer);
         return "redirect:"+path;
     }
     public String removeYoutube(HttpServletRequest request){

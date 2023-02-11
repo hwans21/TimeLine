@@ -13,11 +13,12 @@ import java.util.Date;
 public class Timeline {
 
 
-    public Timeline(User userId, String timelineTitle, Date timelineTime, Long timelineCount) {
+    public Timeline(User userId, String timelineTitle, Date timelineTime, String timelineStreamer, Long timelineCount) {
         this.userId = userId;
         this.timelineTitle = timelineTitle;
         this.timelineTime = timelineTime;
         this.timelineCount = timelineCount;
+        this.timelineStreamer = timelineStreamer;
     }
 
     @Id
@@ -34,6 +35,9 @@ public class Timeline {
 
     @Column(name="timeline_count")
     private Long timelineCount;
+
+    @Column(name="timeline_streamer")
+    private String timelineStreamer;
 
     @ManyToOne
     @JoinColumn(name="user_id")

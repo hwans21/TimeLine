@@ -48,7 +48,7 @@ public class TimelineRepository {
         return list;
     }
 
-    public List<Timeline> getList(Date start, Date end, String order, int pageNum){
+    public List<Timeline> getList(Date start, Date end, String order, int pageNum,String streamer){
         List<Timeline> list = null;
         try{
 
@@ -57,11 +57,13 @@ public class TimelineRepository {
                 sql = "SELECT t FROM Timeline t " +
                         "WHERE t.timelineTime BETWEEN :start AND :end " +
                         "AND t.youtubeId.youtubeId IS NOT NULL " +
+                        "AND t.youtubeId.userId.userLogin = :streamer " +
                         "ORDER BY t.timelineTime DESC";
             } else if(order.equals("count")){
                 sql = "SELECT t FROM Timeline t " +
                         "WHERE t.timelineTime BETWEEN :start AND :end " +
                         "AND t.youtubeId.youtubeId IS NOT NULL " +
+                        "AND t.youtubeId.userId.userLogin = :streamer " +
                         "ORDER BY t.timelineCount DESC";
             }
             PageVO vo = new PageVO(pageNum, 10);
@@ -69,6 +71,7 @@ public class TimelineRepository {
             list = em.createQuery(sql, Timeline.class)
                     .setParameter("start", start)
                     .setParameter("end",end)
+                    .setParameter("streamer", streamer)
                     .setFirstResult((vo.getCurrentPage()-1)*vo.getPageOfCount())
                     .setMaxResults(vo.getPageOfCount())
                     .getResultList();
@@ -94,27 +97,31 @@ public class TimelineRepository {
     }
 
     @Transactional
-    public int updateTimeline(Youtube youtubeId, Date start, Date end){
+    public int updateTimeline(Youtube youtubeId, Date start, Date end, String streamer){
         String sql = "UPDATE FROM Timeline t " +
                 "SET t.youtubeId.youtubeId = :youtubeId " +
-                "WHERE t.timelineTime BETWEEN :start AND :end ";
+                "WHERE t.timelineTime BETWEEN :start AND :end " +
+                "AND t.timelineStreamer = :streamer";
 
         return em.createQuery(sql)
                 .setParameter("youtubeId",youtubeId.getYoutubeId())
                 .setParameter("start",start)
                 .setParameter("end",end)
+                .setParameter("streamer", streamer)
                 .executeUpdate();
     }
     @Transactional
-    public int updateNotTimeline(Youtube youtubeId, Date start, Date end){
+    public int updateNotTimeline(Youtube youtubeId, Date start, Date end, String streamer){
 
         List<Timeline> list =  em.createQuery("Select t FROM Timeline t " +
                 "WHERE t.youtubeId.youtubeId = :youtubeId " +
                 "AND ( t.timelineTime < :start " +
-                "OR t.timelineTime > :end ) ", Timeline.class)
+                "OR t.timelineTime > :end ) " +
+                "AND t.timelineStreamer = :streamer", Timeline.class)
                 .setParameter("youtubeId",youtubeId.getYoutubeId())
                 .setParameter("start",start)
                 .setParameter("end",end)
+                .setParameter("streamer", streamer)
                 .getResultList();
         System.out.println(list.size());
 
@@ -123,11 +130,13 @@ public class TimelineRepository {
                 "SET t.youtubeId.youtubeId = null " +
                 "WHERE t.youtubeId.youtubeId = :youtubeId " +
                 "AND ( t.timelineTime < :start " +
-                "OR t.timelineTime > :end )";
+                "OR t.timelineTime > :end ) " +
+                "AND t.timelineStreamer = :streamer ";
         return em.createQuery(sql)
                 .setParameter("youtubeId",youtubeId.getYoutubeId())
                 .setParameter("start",start)
                 .setParameter("end",end)
+                .setParameter("streamer", streamer)
                 .executeUpdate();
     }
 

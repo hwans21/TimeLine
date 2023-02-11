@@ -30,16 +30,16 @@ public class TimelineService {
             Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
             Long userid = Long.parseLong(user.get("id"));
             User userVO = userRepository.find(userid);
-            String title = map.get("title");
-            String datefm = "yyMMdd_HHmmss";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datefm);
+            String title =  common.scriptCheck(map.get("title"));
+            String streamer = sessionManager.findCookie(request,"streamer").getValue();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
             Date date = null;
             try {
                 date = simpleDateFormat.parse(map.get("time"));
             } catch (java.text.ParseException e) {
-                e.printStackTrace();
+                date = new Date();
             }
-            Timeline vo = new Timeline(userVO, title, date, 0L);
+            Timeline vo = new Timeline(userVO, title, date, streamer, 0L);
             repository.save(vo);
             return true;
         } catch (Exception e){
@@ -76,7 +76,7 @@ public class TimelineService {
         return repository.countup(id);
     }
 
-    public List<Timeline> getList(String start, String end, String order, int pageNum){
+    public List<Timeline> getList(String start, String end, String order, int pageNum, String steamer){
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hhmmss");
         Date startDate = null;
@@ -97,7 +97,7 @@ public class TimelineService {
         if(order == null || order.equals("")){
             order = "timeline_count";
         }
-        List<Timeline> list = repository.getList(startDate, endDate, order, pageNum);
+        List<Timeline> list = repository.getList(startDate, endDate, order, pageNum,steamer);
         return list;
     }
 

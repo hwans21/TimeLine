@@ -220,4 +220,14 @@ public class CommonService {
                 .findAny()
                 .orElse(null);
     }
+
+    public static String scriptCheck(String result){
+        if(result.contains("<") || result.contains(">")){
+            System.out.println("스크립트 탐지");
+            result = result.replaceAll("<","&lt;");
+            result = result.replaceAll(">","&gt;");
+        }
+        System.out.println(result);
+        return result;
+    }
 }

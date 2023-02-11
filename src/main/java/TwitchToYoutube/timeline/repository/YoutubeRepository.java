@@ -25,11 +25,13 @@ public class YoutubeRepository {
         return em.find(Youtube.class, id);
     }
 
-    public List<Youtube> getList(PageVO vo){
+    public List<Youtube> getList(PageVO vo, String streamer){
         String sql = "SELECT y FROM Youtube y " +
+                "WHERE y.userId.userLogin = :streamer " +
                 "ORDER BY y.youtubeRecordStart DESC";
         List<Youtube> youtubelist
                 = em.createQuery(sql, Youtube.class)
+                .setParameter("streamer",streamer)
                 .setFirstResult((vo.getCurrentPage()-1)*vo.getPageOfCount())
                 .setMaxResults(vo.getPageOfCount())
                 .getResultList();

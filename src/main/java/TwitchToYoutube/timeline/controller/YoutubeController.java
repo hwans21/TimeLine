@@ -7,6 +7,7 @@ import TwitchToYoutube.timeline.service.CommonService;
 import TwitchToYoutube.timeline.service.YoutubeService;
 import TwitchToYoutube.timeline.repository.YoutubeRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,9 +36,9 @@ public class YoutubeController {
 
     @GetMapping("/{pageNum}")
     public String managePage(HttpServletRequest request,Model model, @PathVariable("pageNum") int pageNum){
-
-        PageVO vo = service.getPageVO(pageNum);
-        List<Youtube> list = service.getYoutubeList(vo);
+        String streamer = sessionManager.findCookie(request,"streamer").getValue();
+        PageVO vo = service.getPageVO(request,pageNum);
+        List<Youtube> list = service.getYoutubeList(vo, streamer);
         model.addAttribute("list",list);
         model.addAttribute("paging",vo);
         Cookie cookie = sessionManager.findCookie(request, "streamer");

@@ -52,13 +52,14 @@ public class TimeLineContoller {
     @ResponseBody
     @PostMapping("/list")
     public List<Timeline> timelineList(HttpServletRequest request, @RequestBody Map<String, String> map){
+        String streamer = sessionManager.findCookie(request,"streamer").getValue();
         List<Timeline> list = null;
         String start = map.get("start");
         String end = map.get("end");
         String order = map.get("order");
 
         int pageNum = Integer.parseInt(map.get("pageNum"));
-        list = service.getList(start, end, order, pageNum);
+        list = service.getList(start, end, order, pageNum,streamer);
         for(Timeline t : list){
             SimpleDateFormat format = new SimpleDateFormat("yyMMdd_HHmmss");
             t.setTimeFormat(format.format(t.getTimelineTime()));

@@ -1,10 +1,7 @@
 package TwitchToYoutube.timeline.entity;
 
 import TwitchToYoutube.timeline.enums.AuthType;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -48,6 +45,10 @@ public class Youtube {
 
     @Column(name="youtube_url")
     private String youtubeUrl;
+
+    @Setter
+    @Column(name="youtube_streamer")
+    private String youtubeStremaer;
 
     @ManyToOne
     @JoinColumn(name="user_id")
