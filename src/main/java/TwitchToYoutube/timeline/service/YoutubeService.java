@@ -8,6 +8,8 @@ import TwitchToYoutube.timeline.repository.TimelineRepository;
 import TwitchToYoutube.timeline.repository.UserRepository;
 import TwitchToYoutube.timeline.repository.YoutubeRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -29,6 +31,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class YoutubeService {
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     private final SessionManager sessionManager;
     @Autowired
@@ -42,6 +45,7 @@ public class YoutubeService {
 
     private CommonService common;
     public boolean insertService(HttpServletRequest request){
+        log.debug("Youtube Insert Service");
         try{
             Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
             Long userid = Long.parseLong(map.get("id"));
@@ -62,6 +66,7 @@ public class YoutubeService {
 
     }
     public PageVO getPageVO(HttpServletRequest request, int num){
+        log.debug("Youtube getPaging Service");
         String streamer = sessionManager.findCookie(request,"streamer").getValue();
         PageVO vo = new PageVO(num, 10);
         PageVO vo2 = new PageVO(num+1, 10);
@@ -81,6 +86,7 @@ public class YoutubeService {
     }
 
     public Map<String, String> findYoutube(String youtubeId){
+        log.debug("Youtube OneSelect Service");
         Youtube youtube = repository.find(Long.parseLong(youtubeId));
         SimpleDateFormat format = new SimpleDateFormat("yyMMdd_HHmmss");
         String startTime = format.format(youtube.getYoutubeRecordStart());
@@ -93,9 +99,11 @@ public class YoutubeService {
         return map;
     }
     public List<Youtube> getYoutubeList(PageVO vo, String streamer){
-       return repository.getList(vo,streamer);
+        log.debug("Youtube Select Service");
+        return repository.getList(vo,streamer);
     }
     public Map<String, String> getYoutubeInfo(String url){
+        log.debug("Youtube OneSelect Service");
         Map<String, String> map = new HashMap<>();
         try {
             Connection conn = Jsoup.connect(url);

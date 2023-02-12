@@ -1,5 +1,7 @@
 package TwitchToYoutube.timeline.manager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
@@ -14,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionManager {
 
     private static final String SESSION_COOKIE_NAME = "mySessionId";
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     private Map<String, Object> sessionStore = new ConcurrentHashMap<>();
 

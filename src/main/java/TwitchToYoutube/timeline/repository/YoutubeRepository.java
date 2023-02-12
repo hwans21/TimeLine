@@ -3,6 +3,8 @@ package TwitchToYoutube.timeline.repository;
 import TwitchToYoutube.timeline.entity.PageVO;
 import TwitchToYoutube.timeline.entity.Timeline;
 import TwitchToYoutube.timeline.entity.Youtube;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,8 @@ import java.util.*;
 
 @Repository
 public class YoutubeRepository {
+    private final Logger log = LogManager.getLogger(this.getClass());
+
     @PersistenceContext
     private EntityManager em;
 

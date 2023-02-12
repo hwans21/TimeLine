@@ -11,7 +11,8 @@ spring:
       hibernate:
         # show_sql: true
         format_sql: true
-logging.level:
-  org.hibernate.SQL: debug
+logging:
+#  level.org.hibernate.SQL: debug
+  config: src/main/resources/log4j2.xml
 # org.hibernate.type: trace #스프링 부트 2.x, hibernate5
 # org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6

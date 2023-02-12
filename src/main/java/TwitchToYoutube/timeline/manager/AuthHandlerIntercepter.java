@@ -1,6 +1,8 @@
 package TwitchToYoutube.timeline.manager;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -15,10 +17,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthHandlerIntercepter implements HandlerInterceptor {
     private final SessionManager sessionManager;
+    private final Logger log = LogManager.getLogger(this.getClass());
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        System.out.println("preHandle start : "+request.getRequestURL());
+        log.debug("preHandle start : "+request.getRequestURL());
 
 
         Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);

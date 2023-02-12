@@ -6,6 +6,8 @@ import TwitchToYoutube.timeline.manager.SessionManager;
 import TwitchToYoutube.timeline.repository.TimelineRepository;
 import TwitchToYoutube.timeline.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class TimelineService {
+    private final Logger log = LogManager.getLogger(this.getClass());
+
 
     private final SessionManager sessionManager;
     @Autowired
@@ -26,6 +30,7 @@ public class TimelineService {
     private UserRepository userRepository;
     private CommonService common;
     public boolean insertTimeline(HttpServletRequest request, Map<String, String> map){
+        log.debug("Timeline Insert Service");
         try{
             Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
             Long userid = Long.parseLong(user.get("id"));
@@ -48,6 +53,7 @@ public class TimelineService {
         }
     }
     public List<Timeline> selectCopyTimeLine(HttpServletRequest request, Map<String, String> map){
+        log.debug("Timeline selectCopy Service");
         List<Timeline> list = null;
         Map<String, Object> requestMap = new HashMap<>();
         try{
@@ -73,11 +79,12 @@ public class TimelineService {
     }
 
     public int countup(Long id){
+        log.debug("Timeline countup Service");
         return repository.countup(id);
     }
 
     public List<Timeline> getList(String start, String end, String order, int pageNum, String steamer){
-
+        log.debug("Timeline getList Service");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hhmmss");
         Date startDate = null;
         Date endDate = null;

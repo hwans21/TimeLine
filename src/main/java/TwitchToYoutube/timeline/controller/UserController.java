@@ -6,6 +6,8 @@ import TwitchToYoutube.timeline.manager.SessionManager;
 import TwitchToYoutube.timeline.service.CommonService;
 import TwitchToYoutube.timeline.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -30,6 +32,7 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class UserController {
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     private final SessionManager sessionManager;
 
@@ -40,6 +43,7 @@ public class UserController {
     private static final String clientId = "jcmj66qmli9btfjppfvoxnh1i46vjt";
     @PostMapping("/loginStart")
     public String loginStart(HttpServletRequest request,HttpServletResponse response){
+        log.debug("/loginStart : 로그인 시작 전 쿠키 값 세팅");
         String streamer = request.getParameter("streamer");
         Cookie streamerCookies = new Cookie("streamer", streamer);
         response.addCookie(streamerCookies);
@@ -50,12 +54,12 @@ public class UserController {
                 "&scope=user%3Aread%3Aemail" +
                 "&state=c3ab8aa609ea11e793ae92361f002671";
         return "redirect:"+url;
-
     }
 
 
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response, Model model){
+        log.debug("/login : 로그인 된 유저 확인 후 DB 저장");
         String code = request.getParameter("code");
         String scope = request.getParameter("scope");
         String state = request.getParameter("state");

@@ -1,5 +1,7 @@
 package TwitchToYoutube.timeline.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,8 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommonService {
+    private static final Logger log = LogManager.getLogger(CommonService.class);
+
     private static final String clientId = "jcmj66qmli9btfjppfvoxnh1i46vjt";
     public static String secondToStr(int second){
+        int temp = second;
         String result="";
         result += (second/3600 < 10) ? "0"+second/3600 : ""+second/3600;
         result += ":";
@@ -27,6 +32,7 @@ public class CommonService {
         result += ":";
         second = second % 60;
         result += (second < 10) ? "0"+second : ""+second;
+        log.debug(temp+" -> "+result);
         return result;
     }
 
@@ -36,10 +42,12 @@ public class CommonService {
         result += Integer.parseInt(split[0])*3600;
         result += Integer.parseInt(split[1])*60;
         result += Integer.parseInt(split[2]);
+        log.debug(str+" -> "+result);
         return result;
     }
 
     public static Map<String,String> getUser(String token){
+        log.debug("임시토큰 -> display_name, login, id 출력");
         HashMap<String, String> map = new HashMap<>();
 
         Map<String, String> headers = new HashMap<>();
@@ -48,6 +56,7 @@ public class CommonService {
         headers.put("Authorization", token);
         headers.put("Client-Id", clientId);
         String response = getRequest("https://api.twitch.tv/helix/users", headers, datas, "GET");
+        log.debug("response data : "+response);
         JSONParser parser = new JSONParser();
         JSONObject jobj = null;
         try {
@@ -66,6 +75,7 @@ public class CommonService {
 
     }
     public static String getToken(String code){
+        log.debug("code를 입력받아 임시토큰을 받음");
         String token="";
         HashMap<String, String> headers = new HashMap<>();
         HashMap<String, String> datas = new HashMap<>();
@@ -83,10 +93,8 @@ public class CommonService {
             String tokenType = (String) jobj.get("token_type");
             tokenType=tokenType.substring(0,1).toUpperCase()+tokenType.substring(1);
             token = tokenType+" "+accessToken;
-
-
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error(getPrintStackTrace(e));
         }
 
 
@@ -94,6 +102,7 @@ public class CommonService {
     }
 
     public static String getSecretkey(){
+        log.debug("시크릿 키 읽어오기");
         String secretkey="";
         BufferedReader reader = null;
         try {
@@ -104,20 +113,21 @@ public class CommonService {
                 secretkey = str;
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error(getPrintStackTrace(e));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(getPrintStackTrace(e));
         } finally {
             try {
                 reader.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(getPrintStackTrace(e));
             }
         }
         return secretkey;
     }
 
     public static String getRequest(String url, Map<String, String> headers, Map<String, String> datas, String method){
+        log.debug("서버 내부에서 응답값이 필요할 때 쓰는 로직");
         String result="";
 
         if(method.equalsIgnoreCase("get")){
@@ -150,13 +160,11 @@ public class CommonService {
                 }
                 in.close();
                 // print result
-                System.out.println("HTTP 응답 코드 : " + responseCode);
-                System.out.println("HTTP body : " + response.toString());
                 result = response.toString();
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                log.error(getPrintStackTrace(e));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(getPrintStackTrace(e));
 
             }
         }
@@ -223,11 +231,19 @@ public class CommonService {
 
     public static String scriptCheck(String result){
         if(result.contains("<") || result.contains(">")){
-            System.out.println("스크립트 탐지");
+            log.debug("스크립트 탐지");
             result = result.replaceAll("<","&lt;");
             result = result.replaceAll(">","&gt;");
         }
-        System.out.println(result);
+        log.debug(result+ "변환 완료");
         return result;
+    }
+    public static String getPrintStackTrace(Exception e) {
+
+        StringWriter errors = new StringWriter();
+        e.printStackTrace(new PrintWriter(errors));
+
+        return errors.toString();
+
     }
 }

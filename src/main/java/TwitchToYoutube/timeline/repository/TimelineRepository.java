@@ -7,6 +7,8 @@ import TwitchToYoutube.timeline.entity.Youtube;
 import TwitchToYoutube.timeline.manager.SessionManager;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,8 @@ import java.util.Map;
 
 @Repository
 public class TimelineRepository {
+    private final Logger log = LogManager.getLogger(this.getClass());
+
     @PersistenceContext
     private EntityManager em;
 

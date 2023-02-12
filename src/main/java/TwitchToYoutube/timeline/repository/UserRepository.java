@@ -1,6 +1,8 @@
 package TwitchToYoutube.timeline.repository;
 
 import TwitchToYoutube.timeline.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +12,8 @@ import javax.persistence.PersistenceContext;
 
 @Repository
 public class UserRepository {
+    private final Logger log = LogManager.getLogger(this.getClass());
+
     @PersistenceContext
     private EntityManager em;
 

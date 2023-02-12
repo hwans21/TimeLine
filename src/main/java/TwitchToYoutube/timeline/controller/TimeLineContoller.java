@@ -5,6 +5,8 @@ import TwitchToYoutube.timeline.service.CommonService;
 import TwitchToYoutube.timeline.manager.SessionManager;
 import TwitchToYoutube.timeline.service.TimelineService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class TimeLineContoller {
+    private final Logger log = LogManager.getLogger(this.getClass());
 
     private CommonService common;
     private final SessionManager sessionManager;
@@ -25,12 +28,14 @@ public class TimeLineContoller {
     private TimelineService service;
     @GetMapping("")
     public String timelinePage(){
+        log.debug("/timeline : 타임라인 페이지 진입");
         return "timeline_list";
     }
-
+    
     @ResponseBody
     @PostMapping("/insert")
     public String insertTimeLine(HttpServletRequest request, @RequestBody Map<String, String> map){
+        log.debug("/timeline/insert : 타임라인 INSERT 시작");
         if(service.insertTimeline(request, map)) {
             return "정상";
         }else{
@@ -40,6 +45,7 @@ public class TimeLineContoller {
     @ResponseBody
     @PostMapping("/copylist")
     public String selectCopyTimeLine(HttpServletRequest request, @RequestBody Map<String, String> map){
+        log.debug("/timeline/copylist : 본인의 타임라인 LIST COPY 시작");
         String result = "";
         List<Timeline> list = service.selectCopyTimeLine(request, map);
         for(Timeline t : list){
@@ -52,6 +58,7 @@ public class TimeLineContoller {
     @ResponseBody
     @PostMapping("/list")
     public List<Timeline> timelineList(HttpServletRequest request, @RequestBody Map<String, String> map){
+        log.debug("/timeline/list : 타임라인 LIST 시작");
         String streamer = sessionManager.findCookie(request,"streamer").getValue();
         List<Timeline> list = null;
         String start = map.get("start");
@@ -71,6 +78,7 @@ public class TimeLineContoller {
     @ResponseBody
     @PostMapping("/countup")
     public String countup(HttpServletRequest request, @RequestBody Map<String, String> map){
+        log.debug("/timeline/countup : 타임라인 조회수 시작");
         try{
             String idstr = map.get("id");
             Long id = Long.parseLong(idstr);
