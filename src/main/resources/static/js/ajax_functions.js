@@ -30,7 +30,6 @@ function timeline_insert(time,title){
 }
 
 function timeline_copyfind(start, time){
-    console.log(start,time);
     var result;
     $.ajax({
         type:'post',
@@ -91,6 +90,52 @@ function countup(id,url){
             result = data;
             location.href=url
 
+        }
+    });
+}
+
+function youtube_insert(url, date){
+    $.ajax({
+        type:'post',
+        data: JSON.stringify({
+            'url':url,
+            'date':date
+        }),
+        url: '/manage/insert',
+        headers: {'Content-Type': 'application/json'},
+        async: false,
+        success: function(data) {
+            result = data;
+        }
+    });
+}
+function youtube_update(id, url, date){
+    $.ajax({
+        type:'post',
+        data: JSON.stringify({
+            'id':id,
+            'url':url,
+            'date':date
+        }),
+        url: '/manage/update',
+        headers: {'Content-Type': 'application/json'},
+        async: false,
+        success: function(data) {
+            result = data;
+        }
+    });
+}
+function youtube_remove(id){
+    $.ajax({
+        type:'post',
+        data: JSON.stringify({
+            'id':id
+        }),
+        url: '/manage/remove',
+        headers: {'Content-Type': 'application/json'},
+        async: false,
+        success: function(data) {
+            result = data;
         }
     });
 }

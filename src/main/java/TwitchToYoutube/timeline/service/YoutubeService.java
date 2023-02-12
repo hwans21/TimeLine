@@ -44,13 +44,13 @@ public class YoutubeService {
     private TimelineRepository timelineRepository;
 
     private CommonService common;
-    public boolean insertService(HttpServletRequest request){
+    public boolean insertService(HttpServletRequest request,Map<String, String> param){
         log.debug("Youtube Insert Service");
         try{
             Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
             Long userid = Long.parseLong(map.get("id"));
-            String url = request.getParameter("url");
-            String recordStartTime = request.getParameter("date");
+            String url = param.get("url");
+            String recordStartTime = param.get("date");
             Youtube vo = getYoutubeVo(userid,recordStartTime,url);
             vo.setYoutubeStremaer(sessionManager.findCookie(request,"streamer").getValue());
             repository.save(vo);
@@ -136,7 +136,7 @@ public class YoutubeService {
         return map;
     }
 
-    public String updateYoutube(HttpServletRequest request){
+    public String updateYoutube(HttpServletRequest request,Map<String, String> param){
         String referer = request.getHeader("Referer");
         String path = "";
         try {
@@ -148,9 +148,9 @@ public class YoutubeService {
         String streamer = sessionManager.findCookie(request, "streamer").getValue();
         Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
         Long userid = Long.parseLong(map.get("id"));
-        Long youtubeId = Long.parseLong(request.getParameter("id"));
-        String url = request.getParameter("url");
-        String recordStartTime = request.getParameter("date");
+        Long youtubeId = Long.parseLong(param.get("id"));
+        String url = param.get("url");
+        String recordStartTime = param.get("date");
         Youtube vo = getYoutubeVo(userid,recordStartTime,url);
         vo.setYoutubeId(youtubeId);
         repository.update(vo);
@@ -161,7 +161,7 @@ public class YoutubeService {
         timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime(), streamer);
         return "redirect:"+path;
     }
-    public String removeYoutube(HttpServletRequest request){
+    public String removeYoutube(HttpServletRequest request,Map<String, String> param){
         String referer = request.getHeader("Referer");
         String path = "";
         try {
@@ -172,7 +172,7 @@ public class YoutubeService {
         }
         Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
         Long userid = Long.parseLong(map.get("id"));
-        Long youtubeId = Long.parseLong(request.getParameter("id"));
+        Long youtubeId = Long.parseLong(param.get("id"));
 
         Youtube vo = repository.find(youtubeId);
         repository.remove(vo);

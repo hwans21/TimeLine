@@ -1,12 +1,8 @@
 package TwitchToYoutube.timeline.repository;
 
 import TwitchToYoutube.timeline.entity.PageVO;
-import TwitchToYoutube.timeline.entity.QTimeline;
 import TwitchToYoutube.timeline.entity.Timeline;
 import TwitchToYoutube.timeline.entity.Youtube;
-import TwitchToYoutube.timeline.manager.SessionManager;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -14,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

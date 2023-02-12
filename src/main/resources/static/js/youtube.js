@@ -33,17 +33,18 @@ $(document).on('click','.YmodifyBtn', function (e){
 });
 
 $(document).on('click','#YinsertBtn', function (e){
-    $('#actionForm').removeAttr('onsubmit');
-    $('#actionForm').attr('action', '/manage/insert');
-    $('#actionForm').attr('method','post');
-    $('#actionForm').submit();
+    $('#actionForm').attr('onsubmit', 'return false');
+    var url = $('#youtubeURL').val();
+    var date = $('#youtubeDate').val();
+    youtube_insert(url, date);
 });
 
 $(document).on('click','#YupdateBtn',function (e){
-    $('#actionForm').removeAttr('onsubmit');
-    $('#actionForm').attr('action', '/manage/update');
-    $('#actionForm').attr('method','post');
-    $('#actionForm').submit();
+    $('#actionForm').attr('onsubmit', 'return false');
+    var id = $('#youtubeId').val();
+    var url = $('#youtubeURL').val();
+    var date = $('#youtubeDate').val();
+    youtube_update(id, url, date);
 });
 
 $(document).on('click','#YremoveBtn',function (e){
