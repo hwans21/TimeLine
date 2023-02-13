@@ -60,18 +60,24 @@ public class YoutubeController {
     }
     @ResponseBody
     @PostMapping("/insert")
-    public boolean insertYoutube(HttpServletRequest request,@RequestBody Map<String, String> map){
+    public String insertYoutube(HttpServletRequest request,@RequestBody Map<String, String> map){
         log.debug("/manage/insert : 유튜브 INSERT 시작");
         try{
             Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
             Cookie streamer = common.findCookie(request, "streamer");
             if(streamer.getValue().equals(user.get("login"))){
-                service.insertService(request, map);
+                if(service.insertService(request, map)){
+                    return "성공";
+                }else{
+                    return "실패";
+                }
+
+            }else{
+                return "권한부족";
             }
-            String referer = request.getHeader("Referer");
-            return true;
         }catch (Exception e){
-            return false;
+            common.getPrintStackTrace(e);
+            return "실패";
         }
     }
 
@@ -79,28 +85,46 @@ public class YoutubeController {
     @PostMapping("/update")
     public String updateYoutube(HttpServletRequest request,@RequestBody Map<String, String> map){
         log.debug("/manage/update : 유튜브 update 시작");
-
-        Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
-        Cookie streamer = common.findCookie(request, "streamer");
-        if(streamer.getValue().equals(user.get("login"))){
-            service.updateYoutube(request, map);
+        try{
+            Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
+            Cookie streamer = common.findCookie(request, "streamer");
+            if(streamer.getValue().equals(user.get("login"))){
+                service.updateYoutube(request, map);
+                return "성공";
+            }else{
+                return "권한부족";
+            }
+        }catch (Exception e){
+            common.getPrintStackTrace(e);
+            return "실패";
         }
-        String referer = request.getHeader("Referer");
+        
+        
 
-        return "redirect:"+referer;
     }
 
     @ResponseBody
     @PostMapping("/remove")
     public String removeYoutube(HttpServletRequest request,@RequestBody Map<String, String> map){
         log.debug("/manage/remove : 유튜브 remove 시작");
-        Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
-        Cookie streamer = common.findCookie(request, "streamer");
-        if(streamer.getValue().equals(user.get("login"))){
-            return service.removeYoutube(request, map);
+        try {
+            Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
+            Cookie streamer = common.findCookie(request, "streamer");
+            if(streamer.getValue().equals(user.get("login"))){
+                if(service.removeYoutube(map)){
+                    return "성공";
+                } else{
+                    return "실패";
+                }
+
+            }else{
+                return "권한부족";
+            }
+        }catch (Exception e){
+            common.getPrintStackTrace(e);
+            return "실패";
         }
-        String referer = request.getHeader("Referer");
-        return "redirect:"+referer;
+
     }
 
 

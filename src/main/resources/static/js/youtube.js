@@ -37,6 +37,7 @@ $(document).on('click','#YinsertBtn', function (e){
     var url = $('#youtubeURL').val();
     var date = $('#youtubeDate').val();
     youtube_insert(url, date);
+    location.href='/manage/1';
 });
 
 $(document).on('click','#YupdateBtn',function (e){
@@ -45,13 +46,14 @@ $(document).on('click','#YupdateBtn',function (e){
     var url = $('#youtubeURL').val();
     var date = $('#youtubeDate').val();
     youtube_update(id, url, date);
+    location.href='/manage/1';
 });
 
 $(document).on('click','#YremoveBtn',function (e){
-    $('#actionForm').removeAttr('onsubmit');
-    $('#actionForm').attr('action', '/manage/remove');
-    $('#actionForm').attr('method','post');
-    $('#actionForm').submit();
+    $('#actionForm').attr('onsubmit', 'return false');
+    var id = $('#youtubeId').val();
+    youtube_remove(id);
+    location.href='/manage/1';
 });
 
 $('#showInsertBtn').on('click',function(e){

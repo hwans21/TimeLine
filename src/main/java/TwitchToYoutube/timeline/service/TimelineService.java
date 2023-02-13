@@ -48,7 +48,7 @@ public class TimelineService {
             repository.save(vo);
             return true;
         } catch (Exception e){
-            e.printStackTrace();
+            common.getPrintStackTrace(e);
             return false;
         }
     }
@@ -72,7 +72,7 @@ public class TimelineService {
             list = repository.copylist(requestMap);
 
         } catch (Exception e){
-            e.printStackTrace();
+            common.getPrintStackTrace(e);
         }
         System.out.println(list.size());
         return list;

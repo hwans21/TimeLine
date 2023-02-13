@@ -24,7 +24,14 @@ function timeline_insert(time,title){
         headers: {'Content-Type': 'application/json'},
         async: false,
         success: function(data) {
-            console.log(data)
+            if(data==='성공'){
+                alert('타임라인 저장 성공');
+            }else if(data==='실패'){
+                alert('타임라인 저장 실패\ntime : '+time+'\ntitle : '+title);
+            }
+        },
+        error : function(status, error) {
+             alert('오류발생\nstatus : '+status+'\nerror : '+error);
         }
     });
 }
@@ -89,7 +96,6 @@ function countup(id,url){
         success: function(data) {
             result = data;
             location.href=url
-
         }
     });
 }
@@ -105,7 +111,16 @@ function youtube_insert(url, date){
         headers: {'Content-Type': 'application/json'},
         async: false,
         success: function(data) {
-            result = data;
+            if(data==='성공'){
+                alert('유튜브링크 저장 성공');
+            } else if(data==='권한부족'){
+                alert('권한이 부족합니다.');
+            } else if(data==='실패'){
+                alert('유튜브링크 저장 실패\nurl : '+url+'\ndate : '+date);
+            }
+        },
+        error : function(status, error) {
+             alert('오류발생\nstatus : '+status+'\nerror : '+error);
         }
     });
 }
@@ -121,7 +136,16 @@ function youtube_update(id, url, date){
         headers: {'Content-Type': 'application/json'},
         async: false,
         success: function(data) {
-            result = data;
+            if(data==='성공'){
+                alert('유튜브링크 수정 성공');
+            } else if(data==='권한부족'){
+                alert('권한이 부족합니다.');
+            } else if(data==='실패'){
+                alert('유튜브링크 수정 실패\nurl : '+url+'\ndate : '+date);
+            }
+        },
+        error : function(status, error) {
+             alert('오류발생\nstatus : '+status+'\nerror : '+error);
         }
     });
 }
@@ -132,10 +156,23 @@ function youtube_remove(id){
             'id':id
         }),
         url: '/manage/remove',
-        headers: {'Content-Type': 'application/json'},
+        contentType: 'application/json',
         async: false,
         success: function(data) {
-            result = data;
+            if(data==='성공'){
+                alert('유튜브링크 삭제 성공');
+            } else if(data==='권한부족'){
+                alert('권한이 부족합니다.');
+            } else if(data==='실패'){
+                alert('유튜브링크 삭제 실패');
+            }
+        },
+        error : function(status, error) {
+             alert('오류발생\nstatus : '+status+'\nerror : '+error);
         }
     });
+}
+
+function custom_alert(data){
+
 }

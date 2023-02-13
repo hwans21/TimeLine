@@ -37,7 +37,7 @@ public class TimeLineContoller {
     public String insertTimeLine(HttpServletRequest request, @RequestBody Map<String, String> map){
         log.debug("/timeline/insert : 타임라인 INSERT 시작");
         if(service.insertTimeline(request, map)) {
-            return "정상";
+            return "성공";
         }else{
             return "실패";
         }
@@ -48,11 +48,11 @@ public class TimeLineContoller {
         log.debug("/timeline/copylist : 본인의 타임라인 LIST COPY 시작");
         String result = "";
         List<Timeline> list = service.selectCopyTimeLine(request, map);
+        if(list.size()==0) result=" ";
         for(Timeline t : list){
             result += common.secondToStr(t.getTimelineSec())+" ";
             result += t.getTimelineTitle() +"\n";
         }
-        if(list.size()==0) result=" ";
         return result;
     }
     @ResponseBody
@@ -92,4 +92,6 @@ public class TimeLineContoller {
 
 
     }
+
+
 }

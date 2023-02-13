@@ -3,6 +3,7 @@ package TwitchToYoutube.timeline.repository;
 import TwitchToYoutube.timeline.entity.PageVO;
 import TwitchToYoutube.timeline.entity.Timeline;
 import TwitchToYoutube.timeline.entity.Youtube;
+import TwitchToYoutube.timeline.service.CommonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -21,9 +22,14 @@ public class TimelineRepository {
     @PersistenceContext
     private EntityManager em;
 
+    private CommonService common;
     @Transactional
     public Long save(Timeline vo){
-        em.persist(vo);
+        try{
+            em.persist(vo);
+        }catch (Exception e){
+            common.getPrintStackTrace(e);
+        }
         return vo.getTimelineId();
     }
 

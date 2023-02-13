@@ -61,6 +61,7 @@ public class YoutubeService {
             timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime(),streamer);
             return true;
         } catch (Exception e){
+            common.getPrintStackTrace(e);
             return false;
         }
 
@@ -161,22 +162,18 @@ public class YoutubeService {
         timelineRepository.updateTimeline(vo, vo.getYoutubeRecordStart(),cal.getTime(), streamer);
         return "redirect:"+path;
     }
-    public String removeYoutube(HttpServletRequest request,Map<String, String> param){
-        String referer = request.getHeader("Referer");
-        String path = "";
-        try {
-            URL url = new URL(referer);
-            path = url.getPath();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-        Map<String, String> map = (Map<String, String>) sessionManager.getSession(request);
-        Long userid = Long.parseLong(map.get("id"));
-        Long youtubeId = Long.parseLong(param.get("id"));
+    public boolean removeYoutube(Map<String, String> param){
+         try{
+             Long youtubeId = Long.parseLong(param.get("id"));
+             log.debug("id="+youtubeId);
+             Youtube vo = repository.find(youtubeId);
+             repository.remove(vo);
+             return true;
+         } catch (Exception e){
+             common.getPrintStackTrace(e);
+             return false;
+         }
 
-        Youtube vo = repository.find(youtubeId);
-        repository.remove(vo);
-        return "redirect:"+path;
     }
     public Youtube getYoutubeVo(Long userId, String recordStartTime, String url){
         String datefm = "yyMMdd_HHmmss";
