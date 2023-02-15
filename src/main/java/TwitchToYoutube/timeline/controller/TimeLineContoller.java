@@ -36,12 +36,16 @@ public class TimeLineContoller {
     @PostMapping("/insert")
     public String insertTimeLine(HttpServletRequest request, @RequestBody Map<String, String> map){
         log.debug("/timeline/insert : 타임라인 INSERT 시작");
-        if(service.insertTimeline(request, map)) {
-            return "성공";
-        }else{
-            return "실패";
-        }
+        return Long.toString(service.insertTimeline(request, map));
     }
+
+    @ResponseBody
+    @PostMapping("/oneselect")
+    public Map<String, String> oneSelect(HttpServletRequest request, @RequestBody Map<String, String> map){
+        log.debug("/timeline/oneselect : 타임라인 oneselect 시작");
+        return service.oneSelect(request, map);
+    }
+
     @ResponseBody
     @PostMapping("/copylist")
     public String selectCopyTimeLine(HttpServletRequest request, @RequestBody Map<String, String> map){

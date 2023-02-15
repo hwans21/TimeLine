@@ -1,26 +1,40 @@
 $('#showtimeLineBtn').on('click', function(e){
     console.log('timeline');
     $('.modal-title').text('타임라인 등록');
-    $('.modal-body').html('<input type="hidden" id="currentTime" name="currentTime"><input type="text" id="timelineTxt" name="timeline" class="form-control" placeholder="타임라인 제목을 입력하세요">');
-    $('.modal-footer').html('<button type="button" id="TinsertBtn" class="btn btn-primary">저장</button><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>');
+    $('.modal-body').html('<input type="text" id="timelineTxt" name="timeline" class="form-control" placeholder="제목입력 후 Enter키 입력">');
+    $('.modal-footer').html(`<table class="table table-hover">
+                              <thead class="table-dark">
+                                <th class="g-col-xs-1" scope="col">시간</th>
+                                <th class="g-col-xs-10" scope="col">제목</th>
+                              </thead>
+                              <tbody id="tempTable">
+
+
+                              </tbody>
+                            </table>`);
     $('#currentTime').val(currentTime)
 });
 
-$(document).on('click','#TinsertBtn', function(e){
-    var time = $('#currentTime').val();
-    var title = $('#timelineTxt').val();
-    timeline_insert(time, title);
-    $('#modalfade').modal('hide');
-});
+
 $(document).on('keydown','#timelineTxt',function(e){
     if(e.keyCode === 13){
-        $('#actionForm').attr('onsubmit', 'return false');
-        var time = $('#currentTime').val();
-        var title = $('#timelineTxt').val();
-        timeline_insert(time, title);
-        $('#modalfade').modal('hide');
+        insertTimeline();
     }
 });
+
+function insertTimeline(){
+    $('#actionForm').attr('onsubmit', 'return false');
+    var title = $('#timelineTxt').val();
+    var id = timeline_insert(title);
+    var data = timeline_oneselect(id);
+    $('#tempTable').append(`
+        <tr>
+            <td style="display:none">`+data.id+`</td>
+            <td>`+data.date+`</td>
+            <td>`+data.title+`</td>
+        </tr>
+    `);
+}
 
 $(document).ready(function(e){
     var tagName = $('#timelineTable').prop('tagName')

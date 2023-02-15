@@ -12,28 +12,50 @@ function youtube_find(id) {
   	return result;
 }
 
-function timeline_insert(time,title){
-    console.log(time,title);
+function timeline_oneselect(id){
+    var result;
     $.ajax({
         type:'post',
         data: JSON.stringify({
-            'time':time,
-            'title':title
-            }),
-        url: '/timeline/insert',
-        headers: {'Content-Type': 'application/json'},
+            'id':id
+        }),
+        url: '/timeline/oneselect',
+        contentType: 'application/json',
+        dataType : "json",
         async: false,
         success: function(data) {
-            if(data==='성공'){
-                alert('타임라인 저장 성공');
-            }else if(data==='실패'){
-                alert('타임라인 저장 실패\ntime : '+time+'\ntitle : '+title);
-            }
+            result = data;
         },
         error : function(status, error) {
              alert('오류발생\nstatus : '+status+'\nerror : '+error);
         }
     });
+    return result;
+}
+
+function timeline_insert(title){
+    var result;
+    $.ajax({
+        type:'post',
+        data: JSON.stringify({
+            'title':title
+            }),
+        url: '/timeline/insert',
+        contentType: 'application/json',
+        async: false,
+        success: function(data) {
+            if(data!=='-1'){
+                alert('타임라인 저장 성공');
+            }else {
+                alert('타임라인 저장 실패\ntime : '+time+'\ntitle : '+title);
+            }
+            result = data;
+        },
+        error : function(status, error) {
+             alert('오류발생\nstatus : '+status+'\nerror : '+error);
+        }
+    });
+    return result;
 }
 
 function timeline_copyfind(start, time){
@@ -45,7 +67,7 @@ function timeline_copyfind(start, time){
             'time':time
         }),
         url: '/timeline/copylist',
-        headers: {'Content-Type': 'application/json'},
+        contentType: 'application/json',
         async: false,
         success: function(data) {
             console.log(data)
@@ -67,7 +89,7 @@ function timeline_getList(start,end,order, pageNum){
             'pageNum':pageNum
         }),
         url: '/timeline/list',
-        headers: {'Content-Type': 'application/json'},
+        contentType: 'application/json',
         async: false,
         success: function(data) {
             result = data;
@@ -91,7 +113,7 @@ function countup(id,url){
             'id':id
         }),
         url: '/timeline/countup',
-        headers: {'Content-Type': 'application/json'},
+        contentType: 'application/json',
         async: false,
         success: function(data) {
             result = data;
@@ -108,7 +130,7 @@ function youtube_insert(url, date){
             'date':date
         }),
         url: '/manage/insert',
-        headers: {'Content-Type': 'application/json'},
+        contentType: 'application/json',
         async: false,
         success: function(data) {
             if(data==='성공'){
@@ -133,7 +155,7 @@ function youtube_update(id, url, date){
             'date':date
         }),
         url: '/manage/update',
-        headers: {'Content-Type': 'application/json'},
+        contentType: 'application/json',
         async: false,
         success: function(data) {
             if(data==='성공'){

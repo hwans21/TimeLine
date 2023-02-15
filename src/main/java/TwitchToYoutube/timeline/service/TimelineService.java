@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -29,7 +30,19 @@ public class TimelineService {
     @Autowired
     private UserRepository userRepository;
     private CommonService common;
-    public boolean insertTimeline(HttpServletRequest request, Map<String, String> map){
+
+    public Map<String,String> oneSelect(HttpServletRequest request, @RequestBody Map<String, String> map){
+        Map<String,String> result = new HashMap<>();
+        log.debug(map.get("id"));
+        Long id = Long.parseLong(map.get("id"));
+        Timeline vo = repository.find(id);
+        SimpleDateFormat format = new SimpleDateFormat("yyMMdd_HHmmss");
+        result.put("id", Long.toString(vo.getTimelineId()));
+        result.put("date", format.format(vo.getTimelineTime()));
+        result.put("title", vo.getTimelineTitle());
+        return result;
+    }
+    public Long insertTimeline(HttpServletRequest request, Map<String, String> map){
         log.debug("Timeline Insert Service");
         try{
             Map<String, String> user = (Map<String, String>) sessionManager.getSession(request);
@@ -37,19 +50,12 @@ public class TimelineService {
             User userVO = userRepository.find(userid);
             String title =  common.scriptCheck(map.get("title"));
             String streamer = sessionManager.findCookie(request,"streamer").getValue();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
-            Date date = null;
-            try {
-                date = simpleDateFormat.parse(map.get("time"));
-            } catch (java.text.ParseException e) {
-                date = new Date();
-            }
+            Date date = new Date();
             Timeline vo = new Timeline(userVO, title, date, streamer, 0L);
-            repository.save(vo);
-            return true;
+            return repository.save(vo);
         } catch (Exception e){
             common.getPrintStackTrace(e);
-            return false;
+            return -1L;
         }
     }
     public List<Timeline> selectCopyTimeLine(HttpServletRequest request, Map<String, String> map){

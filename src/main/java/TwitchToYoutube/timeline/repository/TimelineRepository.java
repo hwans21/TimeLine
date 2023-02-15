@@ -33,6 +33,10 @@ public class TimelineRepository {
         return vo.getTimelineId();
     }
 
+    public Timeline find(Long id){
+        return em.find(Timeline.class, id);
+    }
+
     public List<Timeline> copylist(Map<String, Object> map){
         Long userid = (Long) map.get("userid");
         Date start = (Date) map.get("start");
@@ -116,19 +120,6 @@ public class TimelineRepository {
     }
     @Transactional
     public int updateNotTimeline(Youtube youtubeId, Date start, Date end, String streamer){
-
-        List<Timeline> list =  em.createQuery("Select t FROM Timeline t " +
-                "WHERE t.youtubeId.youtubeId = :youtubeId " +
-                "AND ( t.timelineTime < :start " +
-                "OR t.timelineTime > :end ) " +
-                "AND t.timelineStreamer = :streamer", Timeline.class)
-                .setParameter("youtubeId",youtubeId.getYoutubeId())
-                .setParameter("start",start)
-                .setParameter("end",end)
-                .setParameter("streamer", streamer)
-                .getResultList();
-        System.out.println(list.size());
-
 
         String sql = "UPDATE FROM Timeline t " +
                 "SET t.youtubeId.youtubeId = null " +
